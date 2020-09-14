@@ -1,8 +1,10 @@
+// App.js is the main document. Here I'm importing the dependencies I'm going to use.
+
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 // import logo from './logo.svg';
 import NavBar from './NavBar/NavBar';
-import RecordsList from './RecordsList/RecordsList'
+import RecordsList from './RecordsList/RecordsList';
 import './App.css';
 
 class App extends Component {
@@ -13,8 +15,13 @@ class App extends Component {
 		};
 	}
 
+	setRecords = (res) => {
+		this.setState({ res });
+	};
+
 	render() {
 		return (
+			// I'm declaring the <Router> tags to be to create the path to RecordsList, and declaring the RecordsList component.
 			<Router>
 				<div className='App'>
 					<nav>
@@ -22,6 +29,7 @@ class App extends Component {
 					</nav>
 					<main>
 						<Route path='/' exact component='RecordsList' />
+						<RecordsList setRecords />
 					</main>
 				</div>
 			</Router>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RecordsList.css';
 import RecordCard from '../RecordCard/RecordCard';
-import axios from 'axios';
+import axios from '../axios';
 import Modal from 'react-bootstrap/Modal';
 
 function RecordsList() {
@@ -9,21 +9,27 @@ function RecordsList() {
 		records: {},
 	});
 
-	useEffect(async () => {
-		const result = await axios(
-			'https://record-collection-be-xl.herokuapp.com/'
-		);
-
-		setData(result.data);
+	useEffect(() => {
+		async function getRecords() {
+			const result = await axios.get();
+			setData(result.data);
+			return result;
+		}
+		getRecords();
 	}, []);
 
 	return (
 		<ul>
-			{data.records.map((i) => (
-				<li key={i.ID}>
-					<a href={i.url}>{i.title}</a>
-				</li>
-			))}
+			<li>
+				<RecordCard />
+			</li>
+			{/* {data.records.map((record, i) => {
+				return (
+					<div key={record.id} onClick={(e) => this.handleShow(i)}>
+						<RecordCard record={record} />
+					</div>
+				);
+			})} */}
 		</ul>
 	);
 }

@@ -2,7 +2,10 @@
 
 ## Project Description
 
-Record Collection is an app that aims to catalog and organize a user's record collection. A user can input a record into the database, fill out information like artist, title, tracklist amongst other related fields.
+Record Collection is an app for cataloging and organizing your record collection. Users can input albums into the database and fill out their information.
+
+
+ information like artist, title, tracklist amongst other related fields.
 
 Once the records are in the database, the user can search and retrieve them and their information in an intuitive, easy to use interface.
 
