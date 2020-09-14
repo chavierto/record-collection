@@ -5,18 +5,18 @@ import axios from '../axios';
 import Modal from 'react-bootstrap/Modal';
 
 function RecordsList() {
-	const [data, setData] = useState({
-		records: {},
-	});
+	// const [data, setData] = useState({
+	// 	records: {},
+	// });
 
-	useEffect(() => {
-		async function getRecords() {
-			const result = await axios.get();
-			setData(result.data);
-			return result;
-		}
-		getRecords();
-	}, []);
+	// useEffect(() => {
+	// 	async function getRecords() {
+	// 		const result = await axios.get();
+	// 		setData(result.data);
+	// 		return result;
+	// 	}
+	// 	getRecords();
+	// }, []);
 
 	return (
 		<ul>

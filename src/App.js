@@ -1,41 +1,43 @@
 // App.js is the main document. Here I'm importing the dependencies I'm going to use.
 
-import React, { Component } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 // import logo from './logo.svg';
 import NavBar from './NavBar/NavBar';
 import RecordsList from './RecordsList/RecordsList';
+import axios from './axios';
 import './App.css';
 
-class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			records: {},
-		};
-	}
+function App() {
+	const [data, setData] = useState({
+		records: {},
+	});
 
-	setRecords = (res) => {
-		this.setState({ res });
-	};
+	useEffect(() => {
+		async function getRecords() {
+			const result = await axios.get();
+			setData(result.data);
+			return result;
+		}
+		getRecords();
+	}, []);
 
-	render() {
-		return (
-			// I'm declaring the <Router> tags to be to create the path to RecordsList, and declaring the RecordsList component.
-			<Router>
-				<div className='App'>
-					<nav>
-						<NavBar />
-					</nav>
-					<main>
-						<Route path='/' exact component='RecordsList' />
-						<RecordsList setRecords />
-					</main>
-				</div>
-			</Router>
-		);
-	}
+	return (
+		// I'm declaring the <Router> tags to be to create the path to RecordsList, and declaring the RecordsList component.
+		<Router>
+			<div className='App'>
+				<nav>
+					<NavBar />
+				</nav>
+				<main>
+					<Route path='/' exact component='RecordsList' />
+					<RecordsList records={data.records} />
+				</main>
+			</div>
+		</Router>
+	);
 }
+
 // function App() {
 //   return (
 //     <div className="App">
