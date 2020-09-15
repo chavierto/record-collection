@@ -28,8 +28,6 @@ The app will be built using Django with REST Framework and PostgreSQL for the ba
 
 ### _MVP User Stories_
 
-- _As a user, I want to be able to sign-in to the app so that I can have a personalized inventory of my record collection._
-
 - _As a user, I want to be able to see a list of all the records in my collection._
 
 - _As a user, I want to be able to click on a record if it interests me so that I can read all the information about the record._
@@ -43,6 +41,8 @@ The app will be built using Django with REST Framework and PostgreSQL for the ba
 - _As a user, I want to be able to search for a record._
 
 - _As a user, I want to be able to sort the current view or search results by different values._
+
+- _As a user, I want to be able to sign-in to the app so that I can have a personalized inventory of my record collection._
 
 ### _Post MVP Gold Goals_
 
