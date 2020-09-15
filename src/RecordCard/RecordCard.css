@@ -1,0 +1,39 @@
+.record-card {
+	display: flex;
+	border-color: black;
+	border: black;
+	border-style: solid;
+	font-weight: 200;
+	flex: 1 100%;
+	margin: 0.5rem 0;
+}
+
+.record-card:hover {
+	cursor: pointer;
+	box-shadow: 4px 4px #00000077;
+}
+
+.photo {
+	max-width: 150px;
+}
+
+.photo-div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.record-title {
+	display: flex;
+	color: #333333;
+	flex-direction: column;
+	padding: 0 0.5rem;
+	align-items: left;
+	justify-content: center;
+	/* font-family: 'Open Sans'; */
+	max-height: 150px;
+	max-width: 140px;
+	font-weight: 400;
+	font-size: large;
+}

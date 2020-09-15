@@ -1,0 +1,62 @@
+h2 {
+	color: black;
+}
+
+.record-list {
+	/* width: 75vmax; */
+	margin: 0 2rem;
+}
+
+.record-list-title {
+	margin: 0.5rem;
+	color: #333333;
+	font-weight: normal;
+}
+
+.record-list-grid {
+	display: flex;
+	flex-direction: column;
+	/* gap: 1rem; */
+}
+
+.record-title {
+	text-align: left;
+	font-size: x-large;
+}
+
+.modal-body {
+	/* position: fixed;
+	z-index: 1; */
+	/* display: grid; */
+	/* background-color: coral; */
+	text-align: center;
+	font-family: 'Oswald';
+}
+
+/* .modal-div {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 1;
+} */
+
+.modal-title {
+	text-align: center;
+	padding: 2rem;
+	font-family: 'Oswald';
+}
+
+.modal-img {
+	max-width: 80%;
+}
+
+.modal-link:hover {
+	color: #444444;
+}
+
+
+@media (min-width: 650px) {
+	
+}

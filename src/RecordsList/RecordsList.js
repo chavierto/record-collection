@@ -1,36 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './RecordsList.css';
 import RecordCard from '../RecordCard/RecordCard';
-import axios from '../axios';
-import Modal from 'react-bootstrap/Modal';
+import RecordModal from '../RecordModal/RecordModal';
 
-function RecordsList() {
-	// const [data, setData] = useState({
-	// 	records: {},
-	// });
-
-	// useEffect(() => {
-	// 	async function getRecords() {
-	// 		const result = await axios.get();
-	// 		setData(result.data);
-	// 		return result;
-	// 	}
-	// 	getRecords();
-	// }, []);
-
+function RecordsList(props) {
+	const records = props.records;
 	return (
-		<ul>
-			<li>
-				<RecordCard />
-			</li>
-			{/* {data.records.map((record, i) => {
-				return (
-					<div key={record.id} onClick={(e) => this.handleShow(i)}>
-						<RecordCard record={record} />
-					</div>
-				);
-			})} */}
-		</ul>
+		<div className='record-list'>
+			<h2 className='record-list-title'>Records</h2>
+			<div className='record-list-grid'>
+				{records.map((record, i) => {
+					return (
+						<div key={record.id} onClick={(e) => props.handleShow(record)}>
+							<RecordCard record={record} />
+						</div>
+					);
+				})}
+			</div>
+			<RecordModal
+				currentRecord={props.currentRecord}
+				show={props.show}
+				handleShow={props.handleShow}
+				handleClose={props.handleClose}
+			/>
+		</div>
 	);
 }
 

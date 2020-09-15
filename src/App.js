@@ -1,26 +1,35 @@
 // App.js is the main document. Here I'm importing the dependencies I'm going to use.
 
-import React, { useState, useEffect, Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-// import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import NavBar from './NavBar/NavBar';
 import RecordsList from './RecordsList/RecordsList';
 import axios from './axios';
 import './App.css';
 
 function App() {
-	const [data, setData] = useState({
-		records: {},
-	});
+	const [data, setData] = useState([]);
+	const [show, setShow] = useState(false);
+	const [currentRecord, setCurrentRecord] = useState({});
 
 	useEffect(() => {
 		async function getRecords() {
 			const result = await axios.get();
 			setData(result.data);
-			return result;
+			// return result;
 		}
 		getRecords();
 	}, []);
+
+	const handleShow = (record) => {
+		setShow(true);
+		setCurrentRecord(record);
+	};
+
+	const handleClose = () => {
+		setShow(false);
+		setCurrentRecord({});
+	};
 
 	return (
 		// I'm declaring the <Router> tags to be to create the path to RecordsList, and declaring the RecordsList component.
@@ -30,33 +39,25 @@ function App() {
 					<NavBar />
 				</nav>
 				<main>
-					<Route path='/' exact component='RecordsList' />
-					<RecordsList records={data.records} />
+					<Route
+						path='/'
+						exact
+						render={(props) => {
+							return (
+								<RecordsList
+									currentRecord={currentRecord}
+									show={show}
+									records={data}
+									handleShow={handleShow}
+									handleClose={handleClose}
+								/>
+							);
+						}}
+					/>
 				</main>
 			</div>
 		</Router>
 	);
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;
