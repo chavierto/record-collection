@@ -10,8 +10,10 @@ The app will be built using Django with REST Framework and PostgreSQL for the ba
 
 <br>
 
-[Here's a link to the Trello board that tracks the project.](https://trello.com/b/XyPSisRn)<br>
-[Here's a link to the Record Collection backend repo.](https://github.com/chavierto/record-collection-backend)
+[Here's a link to the deployed app](https://record-collection-xl.herokuapp.com/)<br>
+[Here's a link to the deployed backend](http://record-collection-be-xl.herokuapp.com/)<br>
+[Here's a link to the Record Collection backend repo.](https://github.com/chavierto/record-collection-backend)<br>
+[Here's a link to the Trello board that tracks the project.](https://trello.com/b/XyPSisRn)
 
 <br>
 
