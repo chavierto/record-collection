@@ -1,9 +1,11 @@
 import React from 'react';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import Modal from 'react-bootstrap/Modal';
 
 function RecordModal(props) {
 	return (
 		<Modal centered show={props.show} onHide={props.handleClose}>
+			<ModalHeader closeButton></ModalHeader>
 			<Modal.Title>{props.currentRecord.title}</Modal.Title>
 			<Modal.Body>
 				<img
@@ -22,11 +24,11 @@ function RecordModal(props) {
 					Release date: {props.currentRecord.release_date}
 					<br></br>
 					Acquired date: {props.currentRecord.acquired_date}
-					<br></br>
-					<br></br>
-					Notes: {props.currentRecord.notes}
 				</p>
 			</Modal.Body>
+			<Modal.Footer>
+				<p className='note'>{props.currentRecord.notes}</p>
+			</Modal.Footer>
 		</Modal>
 	);
 }

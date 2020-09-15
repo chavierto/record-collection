@@ -8,9 +8,17 @@
 	justify-items: center;
 }
 
+
 .nav-text {
 	display: none;
 	padding-left: 2rem;
+	text-decoration: none;
+}
+
+.nav-text,
+.nav-text-small:hover {
+	color: white;
+	text-decoration: none;
 }
 
 .nav-text-small {
@@ -28,6 +36,10 @@
 
 li {
 	padding: 0 0.5rem;
+}
+
+button {
+	border: 0;
 }
 
 @media (min-width: 650px) {
