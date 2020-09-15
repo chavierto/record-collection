@@ -18,7 +18,7 @@ function NavBar(props) {
 					<button onClick={props.handleShowNew}>Add Record</button>
 				</li> */}
 				<li>
-					<Link to='/newrecord'>Add Record</Link>
+					<Link className='new-record-link' to='/newrecord'>Add Record</Link>
 				</li>
 			</ul>
 			<NewRecordModal

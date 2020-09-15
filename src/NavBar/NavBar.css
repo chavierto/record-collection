@@ -8,6 +8,10 @@
 	justify-items: center;
 }
 
+.new-record-link {
+	color: white;
+}
+
 .nav-text {
 	display: none;
 	padding-left: 2rem;
