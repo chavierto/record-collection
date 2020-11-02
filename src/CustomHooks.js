@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const useForm = () => {
-	const [inputs, setInputs] = useState({});
+	const [inputs, setInputs] = useState({
+		title: '',
+		artist: '',
+		genre: '',
+		label: '',
+		release_date: '',
+		acquired_date: '',
+		notes: '',
+	});
 	const handleSubmit = (event) => {
 		if (event) {
 			event.preventDefault();
@@ -11,8 +19,8 @@ const useForm = () => {
 		event.persist();
 		setInputs((inputs) => ({
 			...inputs,
-			[event.target.name]: event.target.value,
-		}));
+		[event.target.id]: event.target.value,
+	 }));
 	};
 
 	return {

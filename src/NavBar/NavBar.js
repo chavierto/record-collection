@@ -1,6 +1,6 @@
 import React from 'react';
-import NewRecordModal from '../NewRecordModal/NewRecordModal';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
+import { Link } from 'react-router-dom';
 import './NavBar.css';
 
 function NavBar(props) {
@@ -8,7 +8,7 @@ function NavBar(props) {
 		<nav className='nav'>
 			<Link to='/'>
 				<h1 className='nav-text'>Record Collection</h1>
-			<h1 className='nav-text-small'>RC</h1>
+				<h1 className='nav-text-small'>RC</h1>
 			</Link>
 			<ul className='menu-list'>
 				{/* <li>Records</li> */}
@@ -21,11 +21,6 @@ function NavBar(props) {
 					<Link to='/newrecord'>Add Record</Link>
 				</li>
 			</ul>
-			<NewRecordModal
-				showAdd={props.showAdd}
-				handleShowNew={props.handleShowNew}
-				handleCloseNew={props.handleCloseNew}
-			/>
 		</nav>
 	);
 }
