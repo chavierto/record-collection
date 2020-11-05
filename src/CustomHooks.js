@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios from './axios';
 
 const useForm = () => {
 	const [inputs, setInputs] = useState({
@@ -11,17 +11,13 @@ const useForm = () => {
 		acquired_date: '',
 		notes: '',
 	});
-	const handleSubmit = (event) => {
+	const handleSubmit = (event, {postURL}) => {
 		if (event) {
 			event.preventDefault();
 			const newAlbum = inputs;
-			
+			axios.post(postURL, newAlbum).catch(console.error);
 			console.log(newAlbum);
-			axios.post(`http://record-collection-be-xl.herokuapp.com/albums/`, newAlbum).catch(console.error);
 			// return res;
-			
-			
-			
 		}
 	};
 	const handleInputChange = (event) => {

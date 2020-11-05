@@ -7,7 +7,7 @@ import NewRecord from './NewRecord/NewRecord';
 import axios from './axios';
 import './App.css';
 
-function App() {
+function App({ baseURL }) {
 	const [data, setData] = useState([]);
 	const [show, setShow] = useState(false);
 	const [currentRecord, setCurrentRecord] = useState({});
@@ -24,12 +24,12 @@ function App() {
 
 	useEffect(() => {
 		async function getRecords() {
-			const result = await axios.get();
+			const result = await axios.get(baseURL);
 			setData(result.data);
 			// return result;
 		}
 		getRecords();
-	}, []);
+	}, [baseURL]);
 
 	//handleShow and handleClose for RecordModal
 	const handleShow = (record) => {
