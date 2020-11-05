@@ -9,9 +9,9 @@ function RecordsList(props) {
 		<div className='record-list'>
 			<h2 className='record-list-title'>Records</h2>
 			<div className='record-list-grid'>
-				{records.map((record, i) => {
+				{records.map((record) => {
 					return (
-						<div key={record.id} onClick={(e) => props.handleShow(record)}>
+						<div key={record.id} onClick={() => props.handleShow(record)}>
 							<RecordCard record={record} />
 						</div>
 					);

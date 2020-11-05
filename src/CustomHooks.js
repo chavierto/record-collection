@@ -1,23 +1,29 @@
 import { useState } from 'react';
 import axios from './axios';
 
-const useForm = () => {
+function useForm (  ) {
 	const [inputs, setInputs] = useState({
 		title: '',
 		artist: '',
+		artist_id: '',
 		genre: '',
 		label: '',
 		release_date: '',
 		acquired_date: '',
+		photo_url: '',
 		notes: '',
+		songs: '',
 	});
-	const handleSubmit = (event, {postURL}) => {
+	const handleSubmit = (event) => {
 		if (event) {
 			event.preventDefault();
 			const newAlbum = inputs;
-			axios.post(postURL, newAlbum).catch(console.error);
 			console.log(newAlbum);
-			// return res;
+			axios
+				.post('http://127.0.0.1:8000/albums/', newAlbum)
+				.then((res) => console.log(res))
+				.catch((err) => console.log(err));
+			// return
 		}
 	};
 	const handleInputChange = (event) => {
