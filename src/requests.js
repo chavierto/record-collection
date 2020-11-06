@@ -1,7 +1,7 @@
 const requests = {
-    postURL: `/albums/`,
-    testURL: `/google/`
+	postAlbumURL: `/albums`,
+	postSongURL: `/songs`,
+	postArtistURL: `/artists`,
 };
-
 
 export default requests;

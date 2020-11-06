@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import NavBar from './NavBar/NavBar';
 import RecordsList from './RecordsList/RecordsList';
 import NewRecord from './NewRecord/NewRecord';
+import NewArtist from './NewArtist/NewArtist';
 import axios from './axios';
 import './App.css';
 
@@ -74,6 +75,11 @@ function App({ baseURL }) {
 								/>
 							);
 						}}></Route>
+					<Route path='/newartist' render={(props) => {
+						return (
+							<NewArtist />
+						);
+					}}></Route>
 				</main>
 			</div>
 		</Router>
