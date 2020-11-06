@@ -1,17 +1,37 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import axios from './axios';
+import requests from './requests';
 
-const useForm = () => {
-	const [inputs, setInputs] = useState({});
+function useForm() {
+	const [inputs, setInputs] = useState({
+		title: '',
+		artist: '',
+		artist_id: '',
+		genre: '',
+		label: '',
+		release_date: '',
+		acquired_date: '',
+		photo_url: '',
+		notes: '',
+		songs: '',
+	});
 	const handleSubmit = (event) => {
 		if (event) {
 			event.preventDefault();
+			const newAlbum = inputs;
+			console.log(newAlbum);
+			axios
+				.post(requests.postURL, newAlbum)
+				.then((res) => console.log(res))
+				.catch((err) => console.log(err));
+			// return
 		}
 	};
 	const handleInputChange = (event) => {
 		event.persist();
 		setInputs((inputs) => ({
 			...inputs,
-			[event.target.name]: event.target.value,
+			[event.target.id]: event.target.value,
 		}));
 	};
 
@@ -20,6 +40,6 @@ const useForm = () => {
 		handleInputChange,
 		inputs,
 	};
-};
+}
 
 export default useForm;
