@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import axios from './axios';
+import requests from './requests';
 
-function useForm (  ) {
+function useForm() {
 	const [inputs, setInputs] = useState({
 		title: '',
 		artist: '',
@@ -20,7 +21,7 @@ function useForm (  ) {
 			const newAlbum = inputs;
 			console.log(newAlbum);
 			axios
-				.post('http://127.0.0.1:8000/albums/', newAlbum)
+				.post(requests.postURL, newAlbum)
 				.then((res) => console.log(res))
 				.catch((err) => console.log(err));
 			// return
@@ -39,6 +40,6 @@ function useForm (  ) {
 		handleInputChange,
 		inputs,
 	};
-};
+}
 
 export default useForm;
