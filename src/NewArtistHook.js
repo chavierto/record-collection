@@ -19,9 +19,9 @@ function useNewArtist() {
 	const handleSubmit = (event) => {
 		if (event) {
 			event.preventDefault();
-			const newAlbum = inputs;
+			const newArtist = inputs;
 			axios
-				.post(requests.postArtistURL, newAlbum)
+				.post(requests.postArtistURL, newArtist)
 				.catch((err) => console.log(err));
 			// return
 		}
