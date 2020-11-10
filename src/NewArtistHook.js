@@ -20,10 +20,8 @@ function useNewArtist() {
 		if (event) {
 			event.preventDefault();
 			const newAlbum = inputs;
-			console.log(newAlbum);
 			axios
 				.post(requests.postArtistURL, newAlbum)
-				.then((res) => console.log(res))
 				.catch((err) => console.log(err));
 			// return
 		}
