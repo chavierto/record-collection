@@ -6,11 +6,13 @@
 	font-weight: 200;
 	flex: 1 100%;
 	margin: 0.5rem 0;
+	transition: transform 80ms;
 }
 
 .record-card:hover {
 	cursor: pointer;
 	box-shadow: 4px 4px #00000077;
+	transform: scale(1.03);
 }
 
 .photo {
