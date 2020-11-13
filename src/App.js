@@ -25,7 +25,7 @@ function App({ baseURL }) {
 
 	useEffect(() => {
 		async function getRecords() {
-			const result = await axios.get(baseURL);
+			const result = await axios.get(baseURL).catch((err) => console.log(err));;
 			setData(result.data);
 			// return result;
 		}
