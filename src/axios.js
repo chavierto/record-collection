@@ -1,8 +1,8 @@
 import axios from 'axios';
+import requests from './requests';
 
 const instance = axios.create({
-	// baseURL: 'https://record-collection-be-xl.herokuapp.com/',
-	baseURL: 'http://127.0.0.1:8000',
+	baseURL: `${requests.baseUrl}`,
 });
 
 export default instance;
