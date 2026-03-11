@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from './axios';
 import requests from './requests';
 
 function useForm() {
+	const history = useHistory();
 	const [inputs, setInputs] = useState({
 		title: '',
 		artist: '',
@@ -19,13 +21,15 @@ function useForm() {
 	const handleSubmit = (event) => {
 		if (event) {
 			event.preventDefault();
-			const newAlbum = inputs;
-			console.log(newAlbum);
+			const newAlbum = {
+				...inputs,
+				release_date: inputs.release_date || null,
+				acquired_date: inputs.acquired_date || null,
+			};
 			axios
 				.post(requests.postAlbumURL, newAlbum)
-				.then((res) => console.log(res))
+				.then(() => history.push('/'))
 				.catch((err) => console.log(err));
-			// return
 		}
 	};
 	const handleInputChange = (event) => {

@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from './axios';
 import requests from './requests';
 
 function useNewArtist() {
+	const history = useHistory();
 	const [inputs, setInputs] = useState({
 		title: '',
 		artist: '',
@@ -22,8 +24,8 @@ function useNewArtist() {
 			const newArtist = inputs;
 			axios
 				.post(requests.postArtistURL, newArtist)
+				.then(() => history.push('/'))
 				.catch((err) => console.log(err));
-			// return
 		}
 	};
 	const handleInputChange = (event) => {

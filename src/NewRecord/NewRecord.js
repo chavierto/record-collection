@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useForm from '../CustomHooks';
+import axios from '../axios';
+import requests from '../requests';
 import './NewRecord.css';
 
 function NewRecord(props) {
 	const { inputs, handleInputChange, handleSubmit } = useForm();
+	const [artists, setArtists] = useState([]);
+
+	useEffect(() => {
+		axios.get(requests.postArtistURL).then((res) => setArtists(res.data));
+	}, []);
 
 	return (
 		<div>
@@ -18,7 +25,6 @@ function NewRecord(props) {
 							required
 							className='inputField'
 							type='text'
-							//What are these names?  Do they reference
 							name='title'
 							id='title'
 							value={inputs.title}
@@ -26,13 +32,16 @@ function NewRecord(props) {
 					</div>
 					<div>
 						<label>Artist:</label>
-						<input
+						<select
 							className='inputField'
-							type='text'
-							name='artist'
-							id='artist'
-							value={inputs.artist}
-							onChange={handleInputChange}></input>
+							id='artist_id'
+							value={inputs.artist_id}
+							onChange={handleInputChange}>
+							<option value=''>Select an artist</option>
+							{artists.map((a) => (
+								<option key={a.id} value={a.id}>{a.artist}</option>
+							))}
+						</select>
 					</div>
 					<div>
 						<label>Genre:</label>
