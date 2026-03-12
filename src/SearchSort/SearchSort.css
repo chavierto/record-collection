@@ -1,0 +1,43 @@
+.search-sort {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	align-items: center;
+	padding: 0.75rem 1rem;
+}
+
+.search-input {
+	flex: 1;
+	min-width: 160px;
+}
+
+.sort-controls {
+	display: flex;
+	align-items: center;
+	gap: 0;
+}
+
+.sort-label {
+	font-family: 'Oswald', sans-serif;
+	font-weight: lighter;
+	margin-right: 0.4rem;
+	white-space: nowrap;
+}
+
+
+.sort-direction-btn {
+	font-family: 'Oswald', sans-serif;
+	font-size: 1rem;
+	border: 1px solid #555555;
+	padding: 0 0.6rem;
+	cursor: pointer;
+	background-color: transparent;
+	color: #555555;
+	border-radius: 0;
+	align-self: stretch;
+}
+
+.sort-direction-btn:hover {
+	background-color: #555555;
+	color: #eeeeee;
+}

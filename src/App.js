@@ -5,6 +5,7 @@ import NavBar from './NavBar/NavBar';
 import RecordsList from './RecordsList/RecordsList';
 import NewRecord from './NewRecord/NewRecord';
 import NewArtist from './NewArtist/NewArtist';
+import SearchSort from './SearchSort/SearchSort';
 import axios from './axios';
 import requests from './requests';
 import './App.css';
@@ -13,6 +14,9 @@ function AppContent() {
 	const [data, setData] = useState([]);
 	const [show, setShow] = useState(false);
 	const [currentRecord, setCurrentRecord] = useState({});
+	const [searchQuery, setSearchQuery] = useState('');
+	const [sortBy, setSortBy] = useState('default');
+	const [sortAsc, setSortAsc] = useState(true);
 	const location = useLocation();
 
 	useEffect(() => {
@@ -23,7 +27,6 @@ function AppContent() {
 		getRecords();
 	}, [location]);
 
-	//handleShow and handleClose for RecordModal
 	const handleShow = (record) => {
 		setShow(true);
 		setCurrentRecord(record);
@@ -46,6 +49,24 @@ function AppContent() {
 		handleClose();
 	};
 
+	const filteredAndSorted = data
+		.filter((r) => {
+			if (!searchQuery) return true;
+			const q = searchQuery.toLowerCase();
+			return (
+				(r.title && r.title.toLowerCase().includes(q)) ||
+				(r.artist_string && r.artist_string.toLowerCase().includes(q))
+			);
+		})
+		.sort((a, b) => {
+			if (sortBy === 'default') return sortAsc ? a.id - b.id : b.id - a.id;
+			const aVal = a[sortBy] || '';
+			const bVal = b[sortBy] || '';
+			if (aVal < bVal) return sortAsc ? -1 : 1;
+			if (aVal > bVal) return sortAsc ? 1 : -1;
+			return 0;
+		});
+
 	return (
 		<div className='App'>
 			<nav>
@@ -55,32 +76,36 @@ function AppContent() {
 				<Route
 					path='/'
 					exact
-					render={(props) => {
-						return (
+					render={() => (
+						<>
+							<SearchSort
+								searchQuery={searchQuery}
+								onSearchChange={setSearchQuery}
+								sortBy={sortBy}
+								onSortChange={setSortBy}
+								sortAsc={sortAsc}
+								onSortDirectionToggle={() => setSortAsc((prev) => !prev)}
+							/>
 							<RecordsList
 								currentRecord={currentRecord}
 								show={show}
-								records={data}
+								records={filteredAndSorted}
 								handleShow={handleShow}
 								handleClose={handleClose}
 								handleRecordUpdated={handleRecordUpdated}
 								handleRecordDeleted={handleRecordDeleted}
 							/>
-						);
-					}}
+						</>
+					)}
 				/>
 				<Route
 					path='/newrecord'
-					render={(props) => {
-						return (
-							<NewRecord albums={data} />
-						);
-					}}></Route>
-				<Route path='/newartist' render={(props) => {
-					return (
-						<NewArtist />
-					);
-				}}></Route>
+					render={() => <NewRecord albums={data} />}
+				/>
+				<Route
+					path='/newartist'
+					render={() => <NewArtist />}
+				/>
 			</main>
 		</div>
 	);
