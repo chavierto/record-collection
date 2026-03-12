@@ -28,3 +28,119 @@
 	background-color: #b94a48;
 	color: #eeeeee;
 }
+
+.modal-details p {
+	margin: 0.2rem 0;
+}
+
+.tracklist {
+	margin-top: 1rem;
+	text-align: left;
+}
+
+.tracklist-title {
+	font-family: 'Oswald', sans-serif;
+	font-weight: normal;
+	color: #555555;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-size: 0.8em;
+	margin-bottom: 0.3rem;
+}
+
+.tracklist-items {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.tracklist-item {
+	font-family: 'Oswald', sans-serif;
+	font-weight: lighter;
+	padding: 0.15rem 0;
+	border-bottom: 1px solid #dddddd;
+}
+
+.track-num {
+	color: #888888;
+}
+
+.tracklist-edit {
+	margin-top: 1rem;
+	text-align: left;
+}
+
+.tracklist-edit-items {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0.5rem 0;
+}
+
+.tracklist-edit-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.2rem 0;
+	border-bottom: 1px solid #dddddd;
+	font-family: 'Oswald', sans-serif;
+	font-weight: lighter;
+	gap: 0.4rem;
+}
+
+.drag-handle {
+	cursor: grab;
+	color: #aaaaaa;
+	padding: 0 0.25rem;
+	flex-shrink: 0;
+	user-select: none;
+}
+
+.drag-handle:active {
+	cursor: grabbing;
+}
+
+.track-item-text {
+	flex: 1;
+}
+
+.track-item-actions {
+	display: flex;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.track-action-btn {
+	padding: 0.1rem 0.4rem;
+	font-size: 0.75em;
+}
+
+.track-edit-inputs {
+	display: flex;
+	gap: 0.4rem;
+	flex: 1;
+}
+
+.track-edit-actions {
+	display: flex;
+	flex-shrink: 0;
+}
+
+.add-track-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	margin-top: 0.5rem;
+}
+
+.track-num-input {
+	width: 4rem;
+}
+
+.track-title-input {
+	flex: 1;
+}
+
+.add-track-actions {
+	display: flex;
+	justify-content: flex-end;
+}
