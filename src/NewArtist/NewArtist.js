@@ -3,7 +3,7 @@ import useForm from '../NewArtistHook';
 import './NewArtist.css';
 
 function NewArtist(props) {
-	const { inputs, handleInputChange, handleSubmit } = useForm();
+	const { inputs, handleInputChange, handleSubmit, error } = useForm();
 
 	return (
 		<div>
@@ -13,14 +13,21 @@ function NewArtist(props) {
 			<form onSubmit={handleSubmit}>
 				<div className='editInputs'>
 					<div>
-						<label>Artist:</label>
+						<label htmlFor='artist'>Artist:</label>
 						<input
+							required
 							className='inputField'
 							type='text'
 							name='artist'
 							id='artist'
 							value={inputs.artist}
+							aria-describedby={error ? 'artist-error' : undefined}
 							onChange={handleInputChange}></input>
+						{error && (
+							<span id='artist-error' role='alert' className='formError'>
+								{error}
+							</span>
+						)}
 					</div>
 					<div>
 						<label>Photo URL:</label>

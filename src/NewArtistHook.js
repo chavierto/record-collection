@@ -18,14 +18,27 @@ function useNewArtist() {
 		notes: '',
 		songs: '',
 	});
+	const [error, setError] = useState('');
+
 	const handleSubmit = (event) => {
 		if (event) {
 			event.preventDefault();
+			setError('');
 			const newArtist = inputs;
 			axios
 				.post(requests.postArtistURL, newArtist)
 				.then(() => history.push('/'))
-				.catch((err) => console.log(err));
+				.catch((err) => {
+					if (err.response && err.response.status === 400) {
+						const data = err.response.data;
+						const msg = data.artist
+							? data.artist[0]
+							: 'Something went wrong. Please try again.';
+						setError(msg);
+					} else {
+						setError('Something went wrong. Please try again.');
+					}
+				});
 		}
 	};
 	const handleInputChange = (event) => {
@@ -40,6 +53,7 @@ function useNewArtist() {
 		handleSubmit,
 		handleInputChange,
 		inputs,
+		error,
 	};
 }
 
