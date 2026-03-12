@@ -2,6 +2,14 @@ h2 {
 	color: black;
 }
 
+.record-list-empty {
+	font-family: 'Oswald', sans-serif;
+	font-weight: lighter;
+	color: #555555;
+	text-align: center;
+	padding: 3rem 1rem;
+}
+
 .record-list {
 	/* width: 75vmax; */
 	margin: 0 2rem;

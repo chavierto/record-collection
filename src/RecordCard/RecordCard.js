@@ -10,7 +10,9 @@ function RecordCard(props) {
 				{record.photo_url ? (
 					<img className='photo' src={record.photo_url} alt={record.title} />
 				) : (
-					<div className='photo photo-placeholder' />
+					<div className='photo photo-placeholder'>
+						<span className='photo-placeholder-title'>{record.title}</span>
+					</div>
 				)}
 			</div>
 			<div className='record-title'>

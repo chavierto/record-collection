@@ -5,9 +5,17 @@ import RecordModal from '../RecordModal/RecordModal';
 
 function RecordsList(props) {
 	const records = props.records;
+	const isEmpty = records.length === 0;
 	return (
 		<div className='record-list'>
 			<h2 className='record-list-title'>Records</h2>
+			{isEmpty ? (
+				<p className='record-list-empty'>
+					{props.isFiltered
+						? 'No records match your search.'
+						: 'No records yet. Add your first one!'}
+				</p>
+			) : (
 			<div className='record-list-grid'>
 				{records.map((record) => {
 					return (
@@ -17,6 +25,7 @@ function RecordsList(props) {
 					);
 				})}
 			</div>
+			)}
 			<RecordModal
 				currentRecord={props.currentRecord}
 				show={props.show}

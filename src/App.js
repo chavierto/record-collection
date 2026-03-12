@@ -101,6 +101,7 @@ function AppContent() {
 								currentRecord={currentRecord}
 								show={show}
 								records={filteredAndSorted}
+								isFiltered={!!searchQuery}
 								handleShow={handleShow}
 								handleClose={handleClose}
 								handleRecordUpdated={handleRecordUpdated}

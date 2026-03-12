@@ -36,6 +36,23 @@
 	width: 100%;
 	height: 100%;
 	background-color: #dddddd;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5rem;
+	box-sizing: border-box;
+}
+
+.photo-placeholder-title {
+	font-family: 'Oswald', sans-serif;
+	font-size: 1.1rem;
+	font-weight: normal;
+	color: #444444;
+	text-align: center;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
 }
 
 .record-title {
