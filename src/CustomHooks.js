@@ -44,6 +44,7 @@ function useForm() {
 		handleSubmit,
 		handleInputChange,
 		inputs,
+		setInputs,
 	};
 }
 

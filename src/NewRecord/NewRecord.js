@@ -5,12 +5,43 @@ import requests from '../requests';
 import './NewRecord.css';
 
 function NewRecord(props) {
-	const { inputs, handleInputChange, handleSubmit } = useForm();
+	const { inputs, handleInputChange, handleSubmit, setInputs } = useForm();
 	const [artists, setArtists] = useState([]);
+	const [showNewArtist, setShowNewArtist] = useState(false);
+	const [newArtistName, setNewArtistName] = useState('');
+	const [newArtistError, setNewArtistError] = useState('');
 
 	useEffect(() => {
 		axios.get(requests.postArtistURL).then((res) => setArtists(res.data));
 	}, []);
+
+	const handleAddArtist = () => {
+		const trimmed = newArtistName.trim();
+		if (!trimmed) return;
+
+		const existing = artists.find(
+			(a) => a.artist.toLowerCase() === trimmed.toLowerCase()
+		);
+
+		if (existing) {
+			setInputs((prev) => ({ ...prev, artist_id: String(existing.id) }));
+			setShowNewArtist(false);
+			setNewArtistName('');
+			setNewArtistError('');
+			return;
+		}
+
+		axios
+			.post(requests.postArtistURL, { artist: trimmed })
+			.then((res) => {
+				setArtists((prev) => [...prev, res.data]);
+				setInputs((prev) => ({ ...prev, artist_id: String(res.data.id) }));
+				setShowNewArtist(false);
+				setNewArtistName('');
+				setNewArtistError('');
+			})
+			.catch(() => setNewArtistError('Something went wrong. Please try again.'));
+	};
 
 	return (
 		<div>
@@ -42,6 +73,51 @@ function NewRecord(props) {
 								<option key={a.id} value={a.id}>{a.artist}</option>
 							))}
 						</select>
+						{!showNewArtist && (
+							<button
+								type='button'
+								className='new-artist-toggle'
+								onClick={() => setShowNewArtist(true)}>
+								+ New artist
+							</button>
+						)}
+						{showNewArtist && (
+							<div className='new-artist-form'>
+								<input
+									autoFocus
+									className='inputField'
+									type='text'
+									placeholder='Artist name'
+									value={newArtistName}
+									onChange={(e) => {
+										const val = e.target.value;
+										setNewArtistName(val);
+									}}
+								/>
+								{newArtistError && (
+									<span role='alert' className='formError'>{newArtistError}</span>
+								)}
+								<div className='new-artist-actions'>
+									<button
+										type='button'
+										className='new-artist-btn'
+										style={{ marginRight: '8px' }}
+										onClick={() => {
+											setShowNewArtist(false);
+											setNewArtistName('');
+											setNewArtistError('');
+										}}>
+										Cancel
+									</button>
+									<button
+										type='button'
+										className='new-artist-btn'
+										onClick={handleAddArtist}>
+										Add
+									</button>
+								</div>
+							</div>
+						)}
 					</div>
 					<div>
 						<label>Genre:</label>

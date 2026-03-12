@@ -1,3 +1,55 @@
 label {
 	font-weight: lighter;
 }
+
+
+.new-artist-toggle {
+	font-family: 'Oswald', sans-serif;
+	font-weight: normal;
+	font-size: 0.85em;
+	background: none;
+	border: none;
+	color: #555555;
+	cursor: pointer;
+	padding: 0;
+	margin-top: 4px;
+}
+
+.new-artist-toggle:hover {
+	text-decoration: underline;
+}
+
+.new-artist-form {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	margin-top: 0.4rem;
+	min-width: 200px;
+}
+
+.new-artist-actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.new-artist-btn {
+	font-family: 'Oswald', sans-serif;
+	font-weight: normal;
+	border-radius: 0;
+	border: 1px solid #555555;
+	padding: 0.3rem 1rem;
+	cursor: pointer;
+	background-color: transparent;
+	color: #555555;
+}
+
+.new-artist-btn:hover {
+	background-color: #555555;
+	color: #eeeeee;
+}
+
+.formError {
+	font-family: 'Oswald', sans-serif;
+	color: #b94a48;
+	font-weight: bold;
+}
