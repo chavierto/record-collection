@@ -31,7 +31,8 @@
 	text-align: left;
 }
 
-.artist-combobox-item:hover {
+.artist-combobox-item:hover,
+.artist-combobox-item.highlighted {
 	background-color: #555555;
 	color: #eeeeee;
 }
