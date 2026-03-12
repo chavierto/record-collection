@@ -19,6 +19,12 @@
 	max-width: 150px;
 }
 
+.photo-placeholder {
+	width: 150px;
+	height: 150px;
+	background-color: #dddddd;
+}
+
 .photo-div {
 	display: flex;
 	justify-content: center;

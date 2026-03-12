@@ -127,6 +127,7 @@ function RecordModal(props) {
 	const [newTrack, setNewTrack] = useState({ track: '', title: '' });
 	const [showAddTrack, setShowAddTrack] = useState(false);
 	const [editingId, setEditingId] = useState(null);
+	const [songError, setSongError] = useState('');
 	const titleRef = useRef(null);
 	const newTrackTitleRef = useRef(null);
 
@@ -179,6 +180,7 @@ function RecordModal(props) {
 
 	const handleAddSong = (e) => {
 		e.preventDefault();
+		setSongError('');
 		axios
 			.post(requests.postSongURL, {
 				track: newTrack.track || null,
@@ -191,13 +193,16 @@ function RecordModal(props) {
 				setNewTrack({ track: '', title: '' });
 				setShowAddTrack(false);
 			})
-			.catch(() => {});
+			.catch(() => setSongError('Could not add track. Please try again.'));
 	};
 
 	const handleDeleteSong = (songId) => {
-		axios.delete(requests.songDetailURL(songId)).then(() => {
-			setSongs((prev) => prev.filter((s) => s.id !== songId));
-		});
+		setSongError('');
+		axios.delete(requests.songDetailURL(songId))
+			.then(() => {
+				setSongs((prev) => prev.filter((s) => s.id !== songId));
+			})
+			.catch(() => setSongError('Could not delete track. Please try again.'));
 	};
 
 	const handleEditSong = (songId, track, title) => {
@@ -208,6 +213,7 @@ function RecordModal(props) {
 		}
 		if (track === null && title === null) {
 			// Enter edit mode
+			setSongError('');
 			setEditingId(songId);
 			return;
 		}
@@ -223,7 +229,7 @@ function RecordModal(props) {
 				);
 				setEditingId(null);
 			})
-			.catch(() => {});
+			.catch(() => setSongError('Could not save track. Please try again.'));
 	};
 
 	const handleDragEnd = (event) => {
@@ -420,6 +426,11 @@ function RecordModal(props) {
 
 				<div className='tracklist-edit'>
 					<h6 className='tracklist-title'>Tracklist</h6>
+					{songError && (
+						<p role='alert' style={{ color: '#b94a48', fontFamily: "'Oswald', sans-serif", fontWeight: 'bold', margin: '0.25rem 0' }}>
+							{songError}
+						</p>
+					)}
 					{songs.length > 0 && (
 						<DndContext
 							sensors={sensors}

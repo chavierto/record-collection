@@ -7,7 +7,11 @@ function RecordCard(props) {
 	return (
 		<div className='record-card'>
 			<div className='photo-div'>
-				<img className='photo' src={record.photo_url} alt={record.title} />
+				{record.photo_url ? (
+					<img className='photo' src={record.photo_url} alt={record.title} />
+				) : (
+					<div className='photo photo-placeholder' />
+				)}
 			</div>
 			<div className='record-title'>
 				<p>{record.artist_string}</p>

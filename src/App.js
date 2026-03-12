@@ -12,6 +12,7 @@ import './App.css';
 
 function AppContent() {
 	const [data, setData] = useState([]);
+	const [loadError, setLoadError] = useState(false);
 	const [show, setShow] = useState(false);
 	const [currentRecord, setCurrentRecord] = useState({});
 	const [searchQuery, setSearchQuery] = useState('');
@@ -21,8 +22,13 @@ function AppContent() {
 
 	useEffect(() => {
 		async function getRecords() {
-			const result = await axios.get(requests.postAlbumURL);
-			setData(result.data);
+			try {
+				const result = await axios.get(requests.postAlbumURL);
+				setData(result.data);
+				setLoadError(false);
+			} catch {
+				setLoadError(true);
+			}
 		}
 		getRecords();
 	}, [location]);
@@ -78,6 +84,11 @@ function AppContent() {
 					exact
 					render={() => (
 						<>
+							{loadError && (
+								<p style={{ textAlign: 'center', padding: '2rem', color: '#b94a48', fontFamily: "'Oswald', sans-serif" }}>
+									Could not load records. Please check your connection and try again.
+								</p>
+							)}
 							<SearchSort
 								searchQuery={searchQuery}
 								onSearchChange={setSearchQuery}
