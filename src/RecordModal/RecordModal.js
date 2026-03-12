@@ -16,6 +16,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import useEditRecord from '../EditRecordHook';
+import ArtistCombobox from '../ArtistCombobox/ArtistCombobox';
 import axios from '../axios';
 import requests from '../requests';
 import './RecordModal.css';
@@ -233,22 +234,23 @@ function RecordModal(props) {
 			const oldIndex = prev.findIndex((s) => s.id === active.id);
 			const newIndex = prev.findIndex((s) => s.id === over.id);
 			const reordered = arrayMove(prev, oldIndex, newIndex);
-
-			// Renumber and PATCH changed songs
-			reordered.forEach((song, i) => {
-				const newTrackNum = i + 1;
-				if (song.track !== newTrackNum) {
-					axios
-						.patch(requests.songDetailURL(song.id), { track: newTrackNum })
-						.catch(() => {});
-				}
-			});
-
 			return reordered.map((song, i) => ({ ...song, track: i + 1 }));
 		});
 	};
 
-	const { inputs, handleInputChange, handleUpdate, handleDelete, error } =
+	const handleSaveWithReorder = (e) => {
+		e.preventDefault();
+		const original = currentRecord.songs || [];
+		const patches = songs
+			.filter((s) => {
+				const orig = original.find((o) => o.id === s.id);
+				return orig && orig.track !== s.track;
+			})
+			.map((s) => axios.patch(requests.songDetailURL(s.id), { track: s.track }).catch(() => {}));
+		Promise.all(patches).then(() => performUpdate());
+	};
+
+	const { inputs, handleInputChange, handleUpdate, performUpdate, handleDelete, error } =
 		useEditRecord(currentRecord, onSuccess);
 
 	const readView = (
@@ -328,7 +330,7 @@ function RecordModal(props) {
 	);
 
 	const editView = (
-		<form onSubmit={handleUpdate} autoComplete='off'>
+		<form onSubmit={handleSaveWithReorder} autoComplete='off'>
 			<Modal.Body>
 				{error && (
 					<p role='alert' style={{ color: '#b94a48', fontWeight: 'bold' }}>
@@ -349,16 +351,11 @@ function RecordModal(props) {
 				</div>
 				<div>
 					<label htmlFor='artist_id'>Artist:</label>
-					<select
-						className='inputField'
-						id='artist_id'
+					<ArtistCombobox
+						artists={artists}
 						value={inputs.artist_id}
-						onChange={handleInputChange}>
-						<option value=''>Select an artist</option>
-						{artists.map((a) => (
-							<option key={a.id} value={a.id}>{a.artist}</option>
-						))}
-					</select>
+						onChange={(id) => handleInputChange({ target: { id: 'artist_id', value: id } })}
+					/>
 				</div>
 				<div>
 					<label htmlFor='genre'>Genre:</label>
@@ -504,7 +501,11 @@ function RecordModal(props) {
 				<button
 					className='modal-btn'
 					type='button'
-					onClick={() => setIsEditing(false)}>
+					onClick={() => {
+						setIsEditing(false);
+						setSongs(currentRecord.songs || []);
+						setEditingId(null);
+					}}>
 					Cancel
 				</button>
 				<button className='modal-btn' type='submit'>

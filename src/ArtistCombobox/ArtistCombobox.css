@@ -1,0 +1,38 @@
+.artist-combobox {
+	position: relative;
+	display: inline-block;
+}
+
+.artist-combobox .inputField {
+	width: 100%;
+}
+
+.artist-combobox-list {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background-color: #ffffff;
+	border: 1px solid #555555;
+	border-top: none;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 180px;
+	overflow-y: auto;
+	z-index: 100;
+}
+
+.artist-combobox-item {
+	font-family: 'Oswald', sans-serif;
+	font-weight: lighter;
+	padding: 0.35rem 0.6rem;
+	cursor: pointer;
+	text-align: left;
+}
+
+.artist-combobox-item:hover,
+.artist-combobox-item.highlighted {
+	background-color: #555555;
+	color: #eeeeee;
+}

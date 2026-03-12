@@ -29,25 +29,29 @@ function useEditRecord(initialRecord, onSuccess) {
 	const [error, setError] = useState('');
 
 	const handleInputChange = (event) => {
-		event.persist();
+		if (event.persist) event.persist();
 		setInputs((inputs) => ({
 			...inputs,
 			[event.target.id]: event.target.value,
 		}));
 	};
 
-	const handleUpdate = (event) => {
-		event.preventDefault();
+	const performUpdate = () => {
 		setError('');
 		const updatedAlbum = {
 			...inputs,
 			release_date: inputs.release_date || null,
 			acquired_date: inputs.acquired_date || null,
 		};
-		axios
+		return axios
 			.put(requests.albumDetailURL(initialRecord.id), updatedAlbum)
 			.then((res) => onSuccess(res.data))
 			.catch(() => setError('Something went wrong. Please try again.'));
+	};
+
+	const handleUpdate = (event) => {
+		event.preventDefault();
+		performUpdate();
 	};
 
 	const handleDelete = () => {
@@ -61,6 +65,7 @@ function useEditRecord(initialRecord, onSuccess) {
 		inputs,
 		handleInputChange,
 		handleUpdate,
+		performUpdate,
 		handleDelete,
 		error,
 	};

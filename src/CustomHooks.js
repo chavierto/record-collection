@@ -18,9 +18,12 @@ function useForm() {
 		notes: '',
 		songs: '',
 	});
+	const [error, setError] = useState('');
+
 	const handleSubmit = (event) => {
 		if (event) {
 			event.preventDefault();
+			setError('');
 			const newAlbum = {
 				...inputs,
 				release_date: inputs.release_date || null,
@@ -29,7 +32,7 @@ function useForm() {
 			axios
 				.post(requests.postAlbumURL, newAlbum)
 				.then(() => history.push('/'))
-				.catch((err) => console.log(err));
+				.catch(() => setError('Something went wrong. Please try again.'));
 		}
 	};
 	const handleInputChange = (event) => {
@@ -44,6 +47,8 @@ function useForm() {
 		handleSubmit,
 		handleInputChange,
 		inputs,
+		setInputs,
+		error,
 	};
 }
 
