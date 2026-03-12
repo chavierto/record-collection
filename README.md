@@ -135,9 +135,10 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 
 | Priority | Feature | Status |
 |---|---|---|
-| P0 | Edit and delete albums | Not started |
-| P1 | Tracklist display and management | Not started |
+| P0 | Edit and delete albums | Complete |
+| P1 | Tracklist display and management | Complete |
 | P1 | Search and sort | Not started |
+| P1 | Edit and delete artists | Not started |
 | P2 | Discogs API integration | Not started |
 | P3 | Favorites / want list | Not started |
-| P3 | Authentication / multi-user | Not started |
+| P3 | Authentication / multi-user | Deferred |
