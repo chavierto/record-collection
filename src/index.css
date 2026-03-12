@@ -12,3 +12,35 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 		monospace;
 }
+
+.inputField {
+	font-family: 'Oswald', sans-serif;
+	font-weight: lighter;
+	border: 1px solid #555555;
+	border-radius: 0;
+	padding: 0.25rem 0.5rem;
+	background-color: #ffffff;
+	color: #333333;
+	outline: none;
+}
+
+.inputField:focus {
+	border-color: #333333;
+}
+
+.submitButton {
+	font-family: 'Oswald', sans-serif;
+	font-weight: normal;
+	border-radius: 0;
+	border: 1px solid #555555;
+	padding: 0.3rem 1rem;
+	cursor: pointer;
+	background-color: transparent;
+	color: #555555;
+	margin-top: 0.5rem;
+}
+
+.submitButton:hover {
+	background-color: #555555;
+	color: #eeeeee;
+}
