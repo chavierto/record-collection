@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useForm from '../CustomHooks';
+import ArtistCombobox from '../ArtistCombobox/ArtistCombobox';
 import axios from '../axios';
 import requests from '../requests';
 import './NewRecord.css';
@@ -86,16 +87,11 @@ function NewRecord(props) {
 					</div>
 					<div>
 						<label>Artist:</label>
-						<select
-							className='inputField'
-							id='artist_id'
+						<ArtistCombobox
+							artists={artists}
 							value={inputs.artist_id}
-							onChange={handleInputChange}>
-							<option value=''>Select an artist</option>
-							{artists.map((a) => (
-								<option key={a.id} value={a.id}>{a.artist}</option>
-							))}
-						</select>
+							onChange={(id) => setInputs((prev) => ({ ...prev, artist_id: id }))}
+						/>
 						{!showNewArtist && (
 							<button
 								type='button'

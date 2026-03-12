@@ -16,6 +16,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import useEditRecord from '../EditRecordHook';
+import ArtistCombobox from '../ArtistCombobox/ArtistCombobox';
 import axios from '../axios';
 import requests from '../requests';
 import './RecordModal.css';
@@ -350,16 +351,11 @@ function RecordModal(props) {
 				</div>
 				<div>
 					<label htmlFor='artist_id'>Artist:</label>
-					<select
-						className='inputField'
-						id='artist_id'
+					<ArtistCombobox
+						artists={artists}
 						value={inputs.artist_id}
-						onChange={handleInputChange}>
-						<option value=''>Select an artist</option>
-						{artists.map((a) => (
-							<option key={a.id} value={a.id}>{a.artist}</option>
-						))}
-					</select>
+						onChange={(id) => handleInputChange({ target: { id: 'artist_id', value: id } })}
+					/>
 				</div>
 				<div>
 					<label htmlFor='genre'>Genre:</label>

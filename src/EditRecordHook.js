@@ -29,7 +29,7 @@ function useEditRecord(initialRecord, onSuccess) {
 	const [error, setError] = useState('');
 
 	const handleInputChange = (event) => {
-		event.persist();
+		if (event.persist) event.persist();
 		setInputs((inputs) => ({
 			...inputs,
 			[event.target.id]: event.target.value,
