@@ -93,7 +93,7 @@ function AppContent() {
 								searchQuery={searchQuery}
 								onSearchChange={setSearchQuery}
 								sortBy={sortBy}
-								onSortChange={setSortBy}
+								onSortChange={(val) => { setSortBy(val); setSortAsc(true); }}
 								sortAsc={sortAsc}
 								onSortDirectionToggle={() => setSortAsc((prev) => !prev)}
 							/>
