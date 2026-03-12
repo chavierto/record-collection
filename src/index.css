@@ -22,10 +22,32 @@ code {
 	background-color: #ffffff;
 	color: #333333;
 	outline: none;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .inputField:focus {
 	border-color: #333333;
+}
+
+.editInputs {
+	display: flex;
+	flex-direction: column;
+	max-width: 360px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+.editInputs > div {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 0.4rem;
+}
+
+.editInputs label {
+	display: block;
+	margin-bottom: 0.1rem;
+	margin-right: 0;
 }
 
 .submitButton {
