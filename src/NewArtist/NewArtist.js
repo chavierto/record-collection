@@ -10,7 +10,7 @@ function NewArtist(props) {
 			<br></br>
 			<h4>New Artist</h4>
 			<br></br>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit} autoComplete='off'>
 				<div className='editInputs'>
 					<div>
 						<label htmlFor='artist'>Artist:</label>

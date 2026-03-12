@@ -2,3 +2,29 @@
 	font-family: Oswald;
 	text-align: center;
 }
+
+.modal-btn {
+	font-family: 'Oswald', sans-serif;
+	font-weight: normal;
+	border-radius: 0;
+	border: 1px solid #555555;
+	padding: 0.3rem 1rem;
+	cursor: pointer;
+	background-color: transparent;
+	color: #555555;
+}
+
+.modal-btn:hover {
+	background-color: #555555;
+	color: #eeeeee;
+}
+
+.modal-btn-danger {
+	border-color: #b94a48;
+	color: #b94a48;
+}
+
+.modal-btn-danger:hover {
+	background-color: #b94a48;
+	color: #eeeeee;
+}

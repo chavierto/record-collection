@@ -22,6 +22,8 @@ function RecordsList(props) {
 				show={props.show}
 				handleShow={props.handleShow}
 				handleClose={props.handleClose}
+				handleRecordUpdated={props.handleRecordUpdated}
+				handleRecordDeleted={props.handleRecordDeleted}
 			/>
 		</div>
 	);

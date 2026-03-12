@@ -34,6 +34,18 @@ function AppContent() {
 		setCurrentRecord({});
 	};
 
+	const handleRecordUpdated = (updatedRecord) => {
+		setData((prev) =>
+			prev.map((r) => (r.id === updatedRecord.id ? updatedRecord : r))
+		);
+		setCurrentRecord(updatedRecord);
+	};
+
+	const handleRecordDeleted = (id) => {
+		setData((prev) => prev.filter((r) => r.id !== id));
+		handleClose();
+	};
+
 	return (
 		<div className='App'>
 			<nav>
@@ -51,6 +63,8 @@ function AppContent() {
 								records={data}
 								handleShow={handleShow}
 								handleClose={handleClose}
+								handleRecordUpdated={handleRecordUpdated}
+								handleRecordDeleted={handleRecordDeleted}
 							/>
 						);
 					}}
