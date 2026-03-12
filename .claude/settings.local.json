@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git -C /Users/chavi/code/record-collection/frontend log -1 --format=\"%ci %s\")"
-    ]
-  }
-}
