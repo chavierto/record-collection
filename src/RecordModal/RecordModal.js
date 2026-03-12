@@ -21,6 +21,17 @@ import axios from '../axios';
 import requests from '../requests';
 import './RecordModal.css';
 
+function formatDate(dateStr) {
+	if (!dateStr) return null;
+	const [year, month, day] = dateStr.split('-').map(Number);
+	const date = new Date(year, month - 1, day);
+	const monthName = date.toLocaleString('default', { month: 'long' });
+	const ordinals = ['th', 'st', 'nd', 'rd'];
+	const v = day % 100;
+	const suffix = ordinals[(v - 20) % 10] || ordinals[v] || ordinals[0];
+	return `${monthName} ${day}${suffix}, ${year}`;
+}
+
 function SortableTrackItem({ song, onEdit, onDelete, editingId }) {
 	const {
 		attributes,
@@ -280,10 +291,10 @@ function RecordModal(props) {
 						<p>Label: {currentRecord.label}</p>
 					)}
 					{currentRecord.release_date && (
-						<p>Release date: {currentRecord.release_date}</p>
+						<p>Release date: {formatDate(currentRecord.release_date)}</p>
 					)}
 					{currentRecord.acquired_date && (
-						<p>Acquired date: {currentRecord.acquired_date}</p>
+						<p>Acquired date: {formatDate(currentRecord.acquired_date)}</p>
 					)}
 					{currentRecord.notes && (
 						<p className='note'>{currentRecord.notes}</p>
