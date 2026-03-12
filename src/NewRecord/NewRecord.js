@@ -5,15 +5,38 @@ import requests from '../requests';
 import './NewRecord.css';
 
 function NewRecord(props) {
-	const { inputs, handleInputChange, handleSubmit, setInputs } = useForm();
+	const { albums = [] } = props;
+	const { inputs, handleInputChange, handleSubmit, setInputs, error } = useForm();
 	const [artists, setArtists] = useState([]);
 	const [showNewArtist, setShowNewArtist] = useState(false);
 	const [newArtistName, setNewArtistName] = useState('');
 	const [newArtistError, setNewArtistError] = useState('');
+	const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
+	const [pendingSubmitEvent, setPendingSubmitEvent] = useState(null);
 
 	useEffect(() => {
 		axios.get(requests.postArtistURL).then((res) => setArtists(res.data));
 	}, []);
+
+	const handleFormSubmit = (e) => {
+		e.preventDefault();
+		const duplicate = albums.find(
+			(a) =>
+				a.title.toLowerCase() === inputs.title.toLowerCase() &&
+				String(a.artist_id) === String(inputs.artist_id)
+		);
+		if (duplicate) {
+			setPendingSubmitEvent(e);
+			setShowDuplicateWarning(true);
+			return;
+		}
+		handleSubmit(e);
+	};
+
+	const handleConfirmDuplicate = () => {
+		handleSubmit(pendingSubmitEvent);
+		setShowDuplicateWarning(false);
+	};
 
 	const handleAddArtist = () => {
 		const trimmed = newArtistName.trim();
@@ -48,7 +71,7 @@ function NewRecord(props) {
 			<br></br>
 			<h4>New Record</h4>
 			<br></br>
-			<form onSubmit={handleSubmit} autoComplete='off'>
+			<form onSubmit={handleFormSubmit} autoComplete='off'>
 				<div className='editInputs'>
 					<div>
 						<label>Title: </label>
@@ -181,7 +204,33 @@ function NewRecord(props) {
 						></input>
 					</div>
 				</div>
-				<input type='submit' className='submitButton' />
+				{error && (
+					<p role='alert' className='formError' style={{ marginTop: '0.5rem' }}>
+						{error}
+					</p>
+				)}
+				{showDuplicateWarning ? (
+					<div className='duplicate-warning'>
+						<p>This album may already be in your collection. Add anyway?</p>
+						<div className='duplicate-warning-actions'>
+							<button
+								type='button'
+								className='new-artist-btn'
+								style={{ marginRight: '8px' }}
+								onClick={() => setShowDuplicateWarning(false)}>
+								Cancel
+							</button>
+							<button
+								type='button'
+								className='new-artist-btn'
+								onClick={handleConfirmDuplicate}>
+								Add anyway
+							</button>
+						</div>
+					</div>
+				) : (
+					<input type='submit' className='submitButton' />
+				)}
 			</form>
 		</div>
 	);

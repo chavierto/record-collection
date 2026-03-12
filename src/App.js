@@ -73,7 +73,7 @@ function AppContent() {
 					path='/newrecord'
 					render={(props) => {
 						return (
-							<NewRecord />
+							<NewRecord albums={data} />
 						);
 					}}></Route>
 				<Route path='/newartist' render={(props) => {

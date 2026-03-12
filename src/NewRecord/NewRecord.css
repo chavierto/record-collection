@@ -53,3 +53,19 @@ label {
 	color: #b94a48;
 	font-weight: bold;
 }
+
+.duplicate-warning {
+	font-family: 'Oswald', sans-serif;
+	margin-top: 0.5rem;
+	color: #555555;
+}
+
+.duplicate-warning p {
+	margin-bottom: 0.4rem;
+}
+
+.duplicate-warning-actions {
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+}
