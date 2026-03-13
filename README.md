@@ -142,3 +142,10 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 | P2 | Discogs API integration | Not started |
 | P3 | Favorites / want list | Not started |
 | P3 | Authentication / multi-user | Deferred |
+
+<br>
+
+## Design Notes
+
+**Featured artists on tracks**
+The album artist remains a single FK — the primary credited artist on the cover (e.g. "Radiohead" for a Radiohead album, even if individual tracks have guests). Individual songs already have an `artist` field in the data model for this purpose. Proposed UI: an optional `+ featured artist` link below the track title in the inline track editor, which reveals an ArtistCombobox when clicked. Keeps the form uncluttered for the common case. Featured artist displays as "ft. [name]" in the tracklist read view only when set, and only for songs where a featured artist has been added.
