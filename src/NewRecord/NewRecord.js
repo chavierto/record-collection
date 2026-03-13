@@ -14,6 +14,7 @@ function NewRecord(props) {
 	const [newArtistError, setNewArtistError] = useState('');
 	const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
 	const [pendingSubmitEvent, setPendingSubmitEvent] = useState(null);
+	const [artistExistsNotice, setArtistExistsNotice] = useState('');
 
 	useEffect(() => {
 		axios.get(requests.postArtistURL).then((res) => setArtists(res.data));
@@ -52,6 +53,8 @@ function NewRecord(props) {
 			setShowNewArtist(false);
 			setNewArtistName('');
 			setNewArtistError('');
+			setArtistExistsNotice(`${existing.artist} already exists — selected.`);
+			setTimeout(() => setArtistExistsNotice(''), 3000);
 			return;
 		}
 
@@ -100,7 +103,12 @@ function NewRecord(props) {
 								+ New artist
 							</button>
 						)}
-						{showNewArtist && (
+						{artistExistsNotice && (
+						<span style={{ fontSize: '0.85rem', color: '#555555', fontFamily: "'Oswald', sans-serif" }}>
+							{artistExistsNotice}
+						</span>
+					)}
+					{showNewArtist && (
 							<div className='new-artist-form'>
 								<input
 									autoFocus
