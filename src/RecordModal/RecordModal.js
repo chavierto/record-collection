@@ -270,6 +270,33 @@ function RecordModal(props) {
 	const { inputs, handleInputChange, handleUpdate, performUpdate, handleDelete, error } =
 		useEditRecord(currentRecord, onSuccess);
 
+	const currentSongs = currentRecord.songs || [];
+	const songOrderChanged = songs.some(
+		(s, i) => !currentSongs[i] || s.id !== currentSongs[i].id
+	);
+
+	const isDirty =
+		inputs.title !== (currentRecord.title || '') ||
+		String(inputs.artist_id) !== String(currentRecord.artist_id || '') ||
+		inputs.genre !== (currentRecord.genre || '') ||
+		inputs.label !== (currentRecord.label || '') ||
+		inputs.release_date !== (currentRecord.release_date || '') ||
+		inputs.acquired_date !== (currentRecord.acquired_date || '') ||
+		inputs.photo_url !== (currentRecord.photo_url || '') ||
+		inputs.notes !== (currentRecord.notes || '') ||
+		songOrderChanged;
+
+	const handleModalClose = () => {
+		if (isEditing && isDirty) return;
+		if (isEditing) {
+			setIsEditing(false);
+			setSongs(currentRecord.songs || []);
+			setEditingId(null);
+			return;
+		}
+		handleClose();
+	};
+
 	const readView = (
 		<>
 			<Modal.Body>
@@ -538,7 +565,7 @@ function RecordModal(props) {
 	);
 
 	return (
-		<Modal centered show={props.show} onHide={handleClose}>
+		<Modal centered show={props.show} onHide={handleModalClose}>
 			<ModalHeader closeButton>
 				<Modal.Title>{currentRecord.title}</Modal.Title>
 			</ModalHeader>
