@@ -21,6 +21,7 @@ function SearchSort({ searchQuery, onSearchChange, sortBy, onSortChange, sortAsc
 				placeholder='Search by title or artist...'
 				value={searchQuery}
 				onChange={(e) => onSearchChange(e.target.value)}
+				onKeyDown={(e) => { if (e.key === 'Escape') onSearchChange(''); }}
 			/>
 			<div className='sort-controls'>
 				<span className='sort-label'>Sort by:</span>

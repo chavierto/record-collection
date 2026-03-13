@@ -12,7 +12,7 @@ function ArtistCombobox({ artists, value, onChange }) {
 	// Keep display text in sync if value changes externally (e.g. after new artist created)
 	useEffect(() => {
 		const match = artists.find((a) => String(a.id) === String(value));
-		setQuery(match ? match.artist : '');
+		if (match) setQuery(match.artist);
 	}, [value, artists]);
 
 	// Reset highlight when list changes
@@ -58,7 +58,17 @@ function ArtistCombobox({ artists, value, onChange }) {
 			if (highlightedIndex >= 0 && filtered[highlightedIndex]) {
 				handleSelect(filtered[highlightedIndex]);
 			}
-		} else if (e.key === 'Escape' || e.key === 'Tab') {
+		} else if (e.key === 'Escape') {
+			e.stopPropagation();
+			e.nativeEvent.stopImmediatePropagation();
+			const committedValue = selectedArtist ? selectedArtist.artist : '';
+			if (query !== committedValue) {
+				setQuery(committedValue);
+			} else {
+				setIsOpen(false);
+				setHighlightedIndex(-1);
+			}
+		} else if (e.key === 'Tab') {
 			setIsOpen(false);
 			setHighlightedIndex(-1);
 		}
