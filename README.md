@@ -2,9 +2,9 @@
 
 ## Project Description
 
-Record Collection is an app for cataloging and organizing your record collection. Users can input albums into the database and fill out their information, including artist name, album title, release date, tracklist and other related fields.
+Record Collection is a web app for cataloging and sharing your vinyl collection. Sign in with Google, search Discogs to add records in seconds, and browse your collection from any device — including your phone at the record store.
 
-Once the records are in the database, the user can browse and retrieve them and their information in an intuitive, easy to use interface.
+The long-term vision is a Letterboxd-style community for vinyl collectors: clean, modern, and collection-first, using Discogs as a data source rather than competing with it as a marketplace.
 
 Built with Django REST Framework and PostgreSQL for the backend and React for the frontend.
 
@@ -44,7 +44,7 @@ REACT_APP_DEV_URL=http://localhost:8000
 REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 ```
 
-> Note: `NODE_OPTIONS=--openssl-legacy-provider` is required due to an incompatibility between the current Node.js version and the webpack version used by react-scripts 3.x. Upgrading to react-scripts 5 or migrating to Vite would eliminate this.
+> Note: `NODE_OPTIONS=--openssl-legacy-provider` is required due to an incompatibility between the current Node.js version and the webpack version used by react-scripts 3.x. A migration to Vite is planned and will eliminate this.
 
 <br>
 
@@ -66,42 +66,43 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 ### MVP
 
 - _As a collector, I want to see a list of all the records in my collection so I can browse what I own._
-
 - _As a collector, I want to click on a record to see all its information including artist, title, genre, label, release date, and cover art._
-
 - _As a collector, I want to add a new record to my collection with full metadata so I have a complete catalog._
-
 - _As a collector, I want to add new artists to the database so I can associate albums with them._
-
 - _As a collector, I want to edit or delete a record I've already added so I can keep my data accurate._
-
 - _As a collector, I want to see the full tracklist of an album in the record detail view so I have a complete picture of what I own._
 
 ### Silver Goals
 
 - _As a collector, I want to search my collection by artist, title, or song name so I can find a specific record quickly._
-
 - _As a collector, I want to sort my records by genre, label, or acquisition date so I can browse by category._
-
 - _As a collector, I want to edit or delete artists so I can manage my artist database._
 
 ### Gold Goals
 
 - _As a collector, I want to search Discogs and auto-fill an album's details so I don't have to type everything manually._
-
-- _As a collector, I want to mark records as favorites so I can quickly access the ones I love most._
+- _As a collector, I want to import my entire Discogs collection so I can migrate without re-entering everything._
+- _As a user, I want to sign in with Google so I can access my collection from any device._
+- _As a collector, I want to record the condition of my records (media and sleeve) so I have an accurate picture of what I own._
+- _As a collector, I want to log pressing details (catalog number, country, original vs. reissue) to distinguish between copies._
+- _As a collector, I want to record what I paid for a record._
+- _As a collector, I want to browse an artist page showing all records by that artist in my collection._
+- _As a collector, I want to toggle between a grid view and a dense list view when browsing._
 
 ### Deferred
 
-- _As a user, I want to sign in to the app so I can have a personalized inventory_ — deferred until multi-user support is a clear goal.
+- _As a collector, I want a public profile page where I can share my collection with others._
+- _As a collector, I want to follow other collectors and see what they've been adding._
 
 <br>
 
 ## Tech Stack
 
-**Frontend:** React 16, React Router 5, React Bootstrap, Axios
+**Frontend:** React 16, React Router 5, React Bootstrap, Axios — migration to Vite + React 18 planned
 
 **Backend:** Django, Django REST Framework, PostgreSQL
+
+**Auth:** Google OAuth via Clerk (planned)
 
 <br>
 
@@ -119,13 +120,20 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 - `acquired_date` — optional
 - `genre` — optional
 - `label` — optional
-- `photo_url` — optional
+- `catalog_number` — optional (planned)
+- `country` — optional (planned)
+- `pressing` — original / reissue (planned)
+- `media_condition` — M / NM / VG+ / VG / G+ / G / F / P (planned)
+- `sleeve_condition` — same scale (planned)
+- `price_paid` — optional (planned)
+- `photo_url` — optional; superseded by Discogs cover art once integrated
 - `notes` — optional
+- `discogs_id` — optional (planned)
 
 **Song**
 - `title`
 - `track` — track number
-- `artist` — foreign key to Artist
+- `artist` — foreign key to Artist (used for featured artists)
 - `album` — foreign key to Album
 - `song_url` — optional
 
@@ -138,10 +146,19 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 | P0 | Edit and delete albums | Complete |
 | P1 | Tracklist display and management | Complete |
 | P1 | Search and sort | Complete |
-| P1 | Edit and delete artists | Not started |
-| P2 | Discogs API integration | Not started |
-| P3 | Favorites / want list | Not started |
-| P3 | Authentication / multi-user | Deferred |
+| P1 | Edit and delete artists (UI) | Not started |
+| P2 | Vite + React 18 migration | Not started |
+| P2 | Google OAuth / multi-user auth (Clerk) | Not started |
+| P2 | Mobile UX — bottom sheet modal, tap targets | Not started |
+| P3 | Condition fields (media + sleeve) | Not started |
+| P3 | Pressing details (catalog number, country, pressing) | Not started |
+| P3 | Price paid field | Not started |
+| P3 | Artist page | Not started |
+| P3 | List view toggle | Not started |
+| P4 | Discogs search-and-import | Not started |
+| P4 | Discogs collection bulk import | Not started |
+| P5 | Public collection profiles | Not started |
+| P5 | Social layer (follows, activity feed) | Not started |
 
 <br>
 
@@ -159,3 +176,9 @@ UX polish shipped outside the main roadmap:
 
 **Featured artists on tracks**
 The album artist remains a single FK — the primary credited artist on the cover (e.g. "Radiohead" for a Radiohead album, even if individual tracks have guests). Individual songs already have an `artist` field in the data model for this purpose. Proposed UI: an optional `+ featured artist` link below the track title in the inline track editor, which reveals an ArtistCombobox when clicked. Keeps the form uncluttered for the common case. Featured artist displays as "ft. [name]" in the tracklist read view only when set, and only for songs where a featured artist has been added.
+
+**Photo URL field**
+Album cover art will be populated automatically via the Discogs API once integrated — the `photo_url` field on albums will be deprecated in favour of Discogs-sourced art. The field on artists remains as a manual option.
+
+**Monetisation model**
+Free tier with a paid Pro tier (stats, advanced filters, collection analytics) modelled on Letterboxd. The collector demographic skews toward obsession — power users willing to pay for deeper insight into their own data.
