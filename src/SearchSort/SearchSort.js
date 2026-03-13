@@ -18,7 +18,7 @@ function SearchSort({ searchQuery, onSearchChange, sortBy, onSortChange, sortAsc
 			<input
 				className='inputField search-input'
 				type='text'
-				placeholder='Search by title or artist...'
+				placeholder='Search by title, artist or song...'
 				value={searchQuery}
 				onChange={(e) => onSearchChange(e.target.value)}
 				onKeyDown={(e) => { if (e.key === 'Escape') onSearchChange(''); }}

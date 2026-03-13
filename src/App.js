@@ -61,7 +61,8 @@ function AppContent() {
 			const q = searchQuery.toLowerCase();
 			return (
 				(r.title && r.title.toLowerCase().includes(q)) ||
-				(r.artist_string && r.artist_string.toLowerCase().includes(q))
+				(r.artist_string && r.artist_string.toLowerCase().includes(q)) ||
+				(r.songs && r.songs.some((s) => s.title && s.title.toLowerCase().includes(q)))
 			);
 		})
 		.sort((a, b) => {
