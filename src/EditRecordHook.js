@@ -25,6 +25,7 @@ function useEditRecord(initialRecord, onSuccess) {
 			photo_url: initialRecord.photo_url || '',
 			notes: initialRecord.notes || '',
 		});
+		setError('');
 	}, [initialRecord.id]);
 	const [error, setError] = useState('');
 
