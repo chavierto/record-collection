@@ -10,6 +10,8 @@ function Artists() {
 
 	const [showAdd, setShowAdd] = useState(false);
 	const [newName, setNewName] = useState('');
+	const [newPhotoUrl, setNewPhotoUrl] = useState('');
+	const [newNotes, setNewNotes] = useState('');
 	const [addError, setAddError] = useState('');
 
 	const [editingId, setEditingId] = useState(null);
@@ -45,10 +47,16 @@ function Artists() {
 		if (!trimmed) return;
 		setAddError('');
 		axios
-			.post(requests.postArtistURL, { artist: trimmed })
+			.post(requests.postArtistURL, {
+				artist: trimmed,
+				photo_url: newPhotoUrl || null,
+				notes: newNotes || null,
+			})
 			.then((res) => {
 				setArtists((prev) => [...prev, res.data]);
 				setNewName('');
+				setNewPhotoUrl('');
+				setNewNotes('');
 				setShowAdd(false);
 			})
 			.catch((err) => {
@@ -147,7 +155,29 @@ function Artists() {
 							onChange={(e) => setNewName(e.target.value)}
 							onKeyDown={(e) => {
 								if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
-								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setAddError(''); }
+								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
+							}}
+						/>
+						<input
+							className='inputField'
+							type='text'
+							placeholder='Photo URL'
+							value={newPhotoUrl}
+							onChange={(e) => setNewPhotoUrl(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
+								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
+							}}
+						/>
+						<input
+							className='inputField'
+							type='text'
+							placeholder='Notes'
+							value={newNotes}
+							onChange={(e) => setNewNotes(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
+								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
 							}}
 						/>
 						{addError && <span role='alert' className='formError'>{addError}</span>}
@@ -155,7 +185,7 @@ function Artists() {
 							<button
 								type='button'
 								className='artist-btn'
-								onClick={() => { setShowAdd(false); setNewName(''); setAddError(''); }}>
+								onClick={() => { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }}>
 								Cancel
 							</button>
 							<button type='button' className='artist-btn' onClick={handleAdd}>
@@ -179,6 +209,9 @@ function Artists() {
 						placeholder='Search artists...'
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === 'Escape') setSearchQuery('');
+						}}
 					/>
 					{searchQuery && (
 						<button
