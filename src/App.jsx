@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 import NavBar from './NavBar/NavBar';
 import RecordsList from './RecordsList/RecordsList';
 import NewRecord from './NewRecord/NewRecord';
-import NewArtist from './NewArtist/NewArtist';
+import Artists from './Artists/Artists';
 import SearchSort from './SearchSort/SearchSort';
 import axios from './axios';
 import requests from './requests';
@@ -116,8 +116,8 @@ function AppContent() {
 					render={() => <NewRecord albums={data} />}
 				/>
 				<Route
-					path='/newartist'
-					render={() => <NewArtist />}
+					path='/artists'
+					render={() => <Artists />}
 				/>
 			</main>
 		</div>

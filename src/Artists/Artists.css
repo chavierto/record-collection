@@ -1,0 +1,209 @@
+.artists-page {
+	padding: 1.5rem 2rem;
+	max-width: 600px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+.artists-page h4 {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+	margin-bottom: 1.25rem;
+}
+
+/* Toolbar: add button + search */
+
+.artists-toolbar {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1.25rem;
+	flex-wrap: wrap;
+}
+
+.artist-search-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.artist-search {
+	padding-right: 1.75rem;
+	width: 180px;
+}
+
+.artist-search-clear {
+	position: absolute;
+	right: 0.4rem;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 0.75rem;
+	color: #888888;
+	padding: 0;
+	line-height: 1;
+}
+
+.artist-search-clear:hover {
+	color: #333333;
+}
+
+/* Buttons */
+
+.artist-btn {
+	font-family: 'Oswald', sans-serif;
+	font-weight: normal;
+	border-radius: 0;
+	border: 1px solid #555555;
+	padding: 0.3rem 1rem;
+	cursor: pointer;
+	background-color: transparent;
+	color: #555555;
+}
+
+.artist-btn:hover {
+	background-color: #555555;
+	color: #eeeeee;
+}
+
+.artist-btn-danger {
+	border-color: #b94a48;
+	color: #b94a48;
+}
+
+.artist-btn-danger:hover {
+	background-color: #b94a48;
+	color: #eeeeee;
+}
+
+.artist-btn-protected {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.artist-btn-protected:hover {
+	background-color: transparent;
+	color: #b94a48;
+}
+
+/* Tooltip (desktop hover) */
+
+.artist-delete-wrapper {
+	position: relative;
+}
+
+.artist-delete-wrapper[data-tooltip]:hover::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	bottom: calc(100% + 6px);
+	right: 0;
+	background: #333333;
+	color: #eeeeee;
+	padding: 0.25rem 0.5rem;
+	font-size: 0.75rem;
+	font-family: 'Oswald', sans-serif;
+	white-space: nowrap;
+	pointer-events: none;
+	z-index: 10;
+}
+
+/* Add form */
+
+.artist-add-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	max-width: 280px;
+}
+
+.artist-form-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5rem;
+}
+
+/* List */
+
+.artist-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.artist-list-item {
+	border-bottom: 1px solid #dddddd;
+}
+
+.artist-list-item:first-child {
+	border-top: 1px solid #dddddd;
+}
+
+.artist-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.6rem 0;
+	gap: 1rem;
+}
+
+.artist-row-main {
+	display: flex;
+	align-items: baseline;
+	gap: 0.6rem;
+	flex: 1;
+	min-width: 0;
+}
+
+.artist-name {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+	color: #333333;
+}
+
+.artist-album-count {
+	font-size: 0.8rem;
+	color: #888888;
+}
+
+.artist-row-actions {
+	display: flex;
+	gap: 0.5rem;
+	flex-shrink: 0;
+}
+
+/* Edit form (inline, full row width) */
+
+.artist-edit-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	flex: 1;
+	min-width: 0;
+}
+
+/* Confirm delete */
+
+.artist-confirm-text {
+	font-family: 'Oswald', sans-serif;
+	font-size: 0.9rem;
+	color: #333333;
+}
+
+/* Protected message (mobile tap) */
+
+.artist-protected-msg {
+	font-family: 'Oswald', sans-serif;
+	font-size: 0.8rem;
+	color: #888888;
+	margin: 0 0 0.5rem;
+}
+
+/* Empty state */
+
+.artist-empty {
+	font-family: 'Oswald', sans-serif;
+	color: #888888;
+	padding: 1.5rem 0;
+	text-align: center;
+}

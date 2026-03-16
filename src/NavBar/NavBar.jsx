@@ -14,7 +14,7 @@ function NavBar(props) {
 				<li>
 					<Link to='/newrecord'>Add Record</Link>
 				</li>
-				<li><Link to='/newartist'>New Artist</Link></li>
+				<li><Link to='/artists'>Artists</Link></li>
 			</ul>
 		</nav>
 	);
