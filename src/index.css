@@ -30,6 +30,11 @@ code {
 	border-color: #333333;
 }
 
+.notes-input {
+	resize: vertical;
+	min-height: 4rem;
+}
+
 .editInputs {
 	display: flex;
 	flex-direction: column;

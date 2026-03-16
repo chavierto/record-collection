@@ -1,3 +1,32 @@
+.sheet-body .editInputs {
+	max-width: 100%;
+	width: 100%;
+}
+
+.sheet-body {
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	font-family: 'Oswald', sans-serif;
+	text-align: center;
+}
+
+.modal-img {
+	display: block;
+	max-width: 80%;
+	margin: 0 auto 1rem;
+}
+
+.sheet-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.75rem 1rem;
+	border-top: 1px solid #dddddd;
+	flex-shrink: 0;
+}
+
 .note {
 	font-family: Oswald;
 	text-align: center;
