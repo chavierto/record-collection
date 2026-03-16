@@ -5,6 +5,7 @@ const requests = {
 	postArtistURL: `/artists`,
 	albumDetailURL: (id) => `/albums/${id}`,
 	songDetailURL: (id) => `/songs/${id}`,
+	artistDetailURL: (id) => `/artists/${id}`,
 };
 
 export default requests;

@@ -1,0 +1,113 @@
+.artists-page {
+	padding: 1.5rem 2rem;
+	max-width: 600px;
+}
+
+.artists-page h4 {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+	margin-bottom: 1.25rem;
+}
+
+.artist-btn {
+	font-family: 'Oswald', sans-serif;
+	font-weight: normal;
+	border-radius: 0;
+	border: 1px solid #555555;
+	padding: 0.3rem 1rem;
+	cursor: pointer;
+	background-color: transparent;
+	color: #555555;
+}
+
+.artist-btn:hover:not(:disabled) {
+	background-color: #555555;
+	color: #eeeeee;
+}
+
+.artist-btn:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+
+.artist-btn-danger {
+	border-color: #b94a48;
+	color: #b94a48;
+}
+
+.artist-btn-danger:hover:not(:disabled) {
+	background-color: #b94a48;
+	color: #eeeeee;
+}
+
+.artist-btn-add {
+	margin-bottom: 1.25rem;
+}
+
+.artist-add-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	margin-bottom: 1.25rem;
+	max-width: 280px;
+}
+
+.artist-form-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5rem;
+}
+
+.artist-list {
+	list-style: none;
+	padding: 0;
+	margin: 1rem 0 0;
+}
+
+.artist-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.6rem 0;
+	border-bottom: 1px solid #dddddd;
+	gap: 1rem;
+}
+
+.artist-row:first-child {
+	border-top: 1px solid #dddddd;
+}
+
+.artist-row-main {
+	display: flex;
+	align-items: baseline;
+	gap: 0.6rem;
+	flex: 1;
+	min-width: 0;
+}
+
+.artist-name {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+	color: #333333;
+}
+
+.artist-album-count {
+	font-size: 0.8rem;
+	color: #888888;
+}
+
+.artist-edit-input {
+	max-width: 240px;
+}
+
+.artist-confirm-text {
+	font-family: 'Oswald', sans-serif;
+	font-size: 0.9rem;
+	color: #333333;
+}
+
+.artist-row-actions {
+	display: flex;
+	gap: 0.5rem;
+	flex-shrink: 0;
+}
