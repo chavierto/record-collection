@@ -274,11 +274,11 @@ function RecordModal(props) {
 					<img className='modal-img' alt={currentRecord.title} src={currentRecord.photo_url} />
 				)}
 				<div className='modal-details'>
-					{currentRecord.artist_string && <p>Artist: {currentRecord.artist_string}</p>}
-					{currentRecord.genre && <p>Genre: {currentRecord.genre}</p>}
-					{currentRecord.label && <p>Label: {currentRecord.label}</p>}
-					{currentRecord.release_date && <p>Release date: {formatDate(currentRecord.release_date)}</p>}
-					{currentRecord.acquired_date && <p>Acquired date: {formatDate(currentRecord.acquired_date)}</p>}
+					{currentRecord.artist_string && <p><span className='detail-label'>Artist:</span> {currentRecord.artist_string}</p>}
+					{currentRecord.genre && <p><span className='detail-label'>Genre:</span> {currentRecord.genre}</p>}
+					{currentRecord.label && <p><span className='detail-label'>Label:</span> {currentRecord.label}</p>}
+					{currentRecord.release_date && <p><span className='detail-label'>Release date:</span> {formatDate(currentRecord.release_date)}</p>}
+					{currentRecord.acquired_date && <p><span className='detail-label'>Acquired date:</span> {formatDate(currentRecord.acquired_date)}</p>}
 					{currentRecord.notes && <p className='note'>{currentRecord.notes}</p>}
 				</div>
 				{songs.length > 0 && (

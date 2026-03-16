@@ -29,6 +29,7 @@
 
 .note {
 	font-family: Oswald;
+	font-weight: lighter;
 	text-align: center;
 }
 
@@ -60,6 +61,11 @@
 
 .modal-details p {
 	margin: 0.2rem 0;
+	font-weight: lighter;
+}
+
+.detail-label {
+	font-weight: normal;
 }
 
 .tracklist {
