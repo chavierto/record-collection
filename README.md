@@ -35,16 +35,14 @@ DATABASE_URL=postgresql://rc_user:records@localhost:5432/record_collection_be
 ```bash
 cd frontend
 npm install
-NODE_OPTIONS=--openssl-legacy-provider npm start
+npm start
 ```
 
 Requires a `.env.local` file in `frontend/` with:
 ```
-REACT_APP_DEV_URL=http://localhost:8000
-REACT_APP_PROD_URL=https://your-deployed-backend-url.com
+VITE_DEV_URL=http://localhost:8000
+VITE_PROD_URL=https://your-deployed-backend-url.com
 ```
-
-> Note: `NODE_OPTIONS=--openssl-legacy-provider` is required due to an incompatibility between the current Node.js version and the webpack version used by react-scripts 3.x. A migration to Vite is planned and will eliminate this.
 
 <br>
 
@@ -98,7 +96,7 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 
 ## Tech Stack
 
-**Frontend:** React 16, React Router 5, React Bootstrap, Axios — migration to Vite + React 18 planned
+**Frontend:** React 18, React Router 5, Vite, Axios
 
 **Backend:** Django, Django REST Framework, PostgreSQL
 
@@ -115,7 +113,7 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 
 **Album**
 - `title`
-- `artist` — foreign key to Artist
+- `artist` — foreign key to Artist (PROTECT — cannot delete artist with albums)
 - `release_date` — optional
 - `acquired_date` — optional
 - `genre` — optional
@@ -133,7 +131,7 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 **Song**
 - `title`
 - `track` — track number
-- `artist` — foreign key to Artist (used for featured artists)
+- `artist` — foreign key to Artist, SET_NULL (used for featured artists)
 - `album` — foreign key to Album
 - `song_url` — optional
 
@@ -146,10 +144,10 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 | P0 | Edit and delete albums | Complete |
 | P1 | Tracklist display and management | Complete |
 | P1 | Search and sort | Complete |
-| P1 | Edit and delete artists (UI) | Not started |
-| P2 | Vite + React 18 migration | Not started |
+| P1 | Edit and delete artists (UI) | Complete |
+| P2 | Vite + React 18 migration | Complete |
+| P2 | Mobile UX — bottom sheet modal, tap targets | Complete |
 | P2 | Google OAuth / multi-user auth (Clerk) | Not started |
-| P2 | Mobile UX — bottom sheet modal, tap targets | Not started |
 | P3 | Condition fields (media + sleeve) | Not started |
 | P3 | Pressing details (catalog number, country, pressing) | Not started |
 | P3 | Price paid field | Not started |
@@ -166,8 +164,12 @@ REACT_APP_PROD_URL=https://your-deployed-backend-url.com
 
 UX polish shipped outside the main roadmap:
 
+- **Vite + React 18 migration** — replaced Create React App with Vite; updated to React 18 `createRoot`; switched env vars to `VITE_*`; eliminated `NODE_OPTIONS` workaround
+- **Bootstrap removal** — replaced React Bootstrap modal with a custom `BottomSheet` component; removed Bootstrap CDN; reduced bundle ~22KB
+- **BottomSheet component** — slides up from the bottom on mobile, centered modal on desktop; portal-based (renders outside `.App`); body scroll lock; animated open/close
+- **Artists management hub** — full create, edit, delete at `/artists`; protected delete (can't remove artist with albums); album count shown per artist; full-width search with Escape to clear
 - **Tracklist search** — search now matches song titles in addition to album title and artist, using data already in state (no extra API calls)
-- **Escape key handling** — Escape clears the search bar; in the artist combobox it is two-stage (clears typed text first, then closes dropdown); in the edit modal it does nothing if the form is dirty, preventing accidental loss of unsaved changes including track reordering
+- **Escape key handling** — Escape clears the search bar; in the artist combobox it is two-stage (clears typed text first, then closes dropdown); in the record sheet it does nothing if the form is dirty, preventing accidental loss of unsaved changes including track reordering
 - **Artist exists notice** — when the inline new artist form finds a matching existing artist, it selects them and shows a brief confirmation ("X already exists — selected") rather than silently filling the field or showing an error
 
 ---
