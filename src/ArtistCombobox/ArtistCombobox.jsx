@@ -93,6 +93,13 @@ function ArtistCombobox({ artists, value, onChange }) {
 		}, 150);
 	};
 
+	const handleClear = () => {
+		setQuery('');
+		setIsOpen(false);
+		setHighlightedIndex(-1);
+		onChange('');
+	};
+
 	return (
 		<div className='artist-combobox' ref={containerRef} onBlur={handleBlur}>
 			<input
@@ -105,6 +112,15 @@ function ArtistCombobox({ artists, value, onChange }) {
 				onKeyDown={handleKeyDown}
 				autoComplete='off'
 			/>
+			{query && (
+				<button
+					type='button'
+					className='artist-combobox-clear'
+					onMouseDown={(e) => { e.preventDefault(); handleClear(); }}
+					aria-label='Clear artist'>
+					✕
+				</button>
+			)}
 			{isOpen && filtered.length > 0 && (
 				<ul className='artist-combobox-list' ref={listRef}>
 					{filtered.map((a, i) => (

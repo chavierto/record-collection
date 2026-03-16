@@ -15,14 +15,25 @@ const SORT_OPTIONS = [
 function SearchSort({ searchQuery, onSearchChange, sortBy, onSortChange, sortAsc, onSortDirectionToggle }) {
 	return (
 		<div className='search-sort'>
-			<input
-				className='inputField search-input'
-				type='text'
-				placeholder='Search by title, artist or song...'
-				value={searchQuery}
-				onChange={(e) => onSearchChange(e.target.value)}
-				onKeyDown={(e) => { if (e.key === 'Escape') onSearchChange(''); }}
-			/>
+			<div className='search-input-wrapper'>
+				<input
+					className='inputField search-input'
+					type='text'
+					placeholder='Search by title, artist or song...'
+					value={searchQuery}
+					onChange={(e) => onSearchChange(e.target.value)}
+					onKeyDown={(e) => { if (e.key === 'Escape') onSearchChange(''); }}
+				/>
+				{searchQuery && (
+					<button
+						type='button'
+						className='search-clear'
+						onClick={() => onSearchChange('')}
+						aria-label='Clear search'>
+						✕
+					</button>
+				)}
+			</div>
 			<div className='sort-controls'>
 				<span className='sort-label'>Sort by:</span>
 				<SortDropdown

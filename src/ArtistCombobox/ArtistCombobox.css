@@ -6,6 +6,26 @@
 
 .artist-combobox .inputField {
 	width: 100%;
+	padding-right: 1.75rem;
+}
+
+.artist-combobox-clear {
+	position: absolute;
+	right: 0.4rem;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 0.75rem;
+	color: #888888;
+	padding: 0;
+	line-height: 1;
+	z-index: 101;
+}
+
+.artist-combobox-clear:hover {
+	color: #333333;
 }
 
 .artist-combobox-list {
