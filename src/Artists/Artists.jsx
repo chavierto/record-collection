@@ -141,59 +141,9 @@ function Artists() {
 
 	return (
 		<div className='artists-page'>
-			<h4>Artists</h4>
-
-			<div className='artists-toolbar'>
-				{showAdd ? (
-					<div className='artist-add-form'>
-						<input
-							ref={addInputRef}
-							className='inputField'
-							type='text'
-							placeholder='Artist name'
-							value={newName}
-							onChange={(e) => setNewName(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
-								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
-							}}
-						/>
-						<input
-							className='inputField'
-							type='text'
-							placeholder='Photo URL'
-							value={newPhotoUrl}
-							onChange={(e) => setNewPhotoUrl(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
-								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
-							}}
-						/>
-						<input
-							className='inputField'
-							type='text'
-							placeholder='Notes'
-							value={newNotes}
-							onChange={(e) => setNewNotes(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
-								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
-							}}
-						/>
-						{addError && <span role='alert' className='formError'>{addError}</span>}
-						<div className='artist-form-actions'>
-							<button
-								type='button'
-								className='artist-btn'
-								onClick={() => { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }}>
-								Cancel
-							</button>
-							<button type='button' className='artist-btn' onClick={handleAdd}>
-								Add
-							</button>
-						</div>
-					</div>
-				) : (
+			<div className='artists-header'>
+				<h4>Artists</h4>
+				{!showAdd && (
 					<button
 						type='button'
 						className='artist-btn'
@@ -201,7 +151,58 @@ function Artists() {
 						+ Add Artist
 					</button>
 				)}
+			</div>
 
+			{showAdd && (
+				<div className='artist-add-form'>
+					<input
+						ref={addInputRef}
+						className='inputField'
+						type='text'
+						placeholder='Artist name'
+						value={newName}
+						onChange={(e) => setNewName(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
+							if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
+						}}
+					/>
+					<input
+						className='inputField'
+						type='text'
+						placeholder='Photo URL'
+						value={newPhotoUrl}
+						onChange={(e) => setNewPhotoUrl(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
+							if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
+						}}
+					/>
+					<textarea
+						className='inputField notes-input'
+						placeholder='Notes'
+						value={newNotes}
+						onChange={(e) => setNewNotes(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }
+						}}
+					/>
+					{addError && <span role='alert' className='formError'>{addError}</span>}
+					<div className='artist-form-actions'>
+						<button
+							type='button'
+							className='artist-btn'
+							onClick={() => { setShowAdd(false); setNewName(''); setNewPhotoUrl(''); setNewNotes(''); setAddError(''); }}>
+							Cancel
+						</button>
+						<button type='button' className='artist-btn' onClick={handleAdd}>
+							Add
+						</button>
+					</div>
+				</div>
+			)}
+
+			{!showAdd && (
 				<div className='artist-search-wrapper'>
 					<input
 						className='inputField artist-search'
@@ -223,7 +224,7 @@ function Artists() {
 						</button>
 					)}
 				</div>
-			</div>
+			)}
 
 			{loadError && (
 				<p className='formError' style={{ marginTop: '1rem' }}>
@@ -264,9 +265,8 @@ function Artists() {
 												if (e.key === 'Escape') handleEditCancel();
 											}}
 										/>
-										<input
-											className='inputField'
-											type='text'
+										<textarea
+											className='inputField notes-input'
 											placeholder='Notes'
 											value={editNotes}
 											onChange={(e) => setEditNotes(e.target.value)}

@@ -1,4 +1,15 @@
 
+.new-record-page {
+	padding: 1.5rem 2rem;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.new-record-page h4 {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+	margin-bottom: 1.25rem;
+}
 
 .new-artist-toggle {
 	font-family: 'Oswald', sans-serif;
@@ -65,4 +76,11 @@
 	display: flex;
 	justify-content: center;
 	gap: 0.5rem;
+}
+
+.new-record-actions {
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+	margin-top: 0.5rem;
 }

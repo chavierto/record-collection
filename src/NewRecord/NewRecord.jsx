@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import useForm from '../CustomHooks';
 import ArtistCombobox from '../ArtistCombobox/ArtistCombobox';
 import axios from '../axios';
@@ -7,6 +8,7 @@ import './NewRecord.css';
 
 function NewRecord(props) {
 	const { albums = [] } = props;
+	const history = useHistory();
 	const { inputs, handleInputChange, handleSubmit, setInputs, error } = useForm();
 	const [artists, setArtists] = useState([]);
 	const [showNewArtist, setShowNewArtist] = useState(false);
@@ -71,10 +73,8 @@ function NewRecord(props) {
 	};
 
 	return (
-		<div>
-			<br></br>
+		<div className='new-record-page'>
 			<h4>New Record</h4>
-			<br></br>
 			<form onSubmit={handleFormSubmit} autoComplete='off'>
 				<div className='editInputs'>
 					<div>
@@ -198,14 +198,13 @@ function NewRecord(props) {
 					</div>
 					<div>
 						<label>Notes:</label>
-						<input
-							className='inputField'
-							type='text'
+						<textarea
+							className='inputField notes-input'
 							name='body'
 							id='notes'
 							value={inputs.notes}
 							onChange={handleInputChange}
-						></input>
+						/>
 					</div>
 				</div>
 				{error && (
@@ -233,7 +232,12 @@ function NewRecord(props) {
 						</div>
 					</div>
 				) : (
-					<input type='submit' className='submitButton' />
+					<div className='new-record-actions'>
+						<button type='button' className='submitButton' onClick={() => history.push('/')}>
+							Cancel
+						</button>
+						<input type='submit' className='submitButton' />
+					</div>
 				)}
 			</form>
 		</div>

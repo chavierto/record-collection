@@ -330,41 +330,43 @@ function RecordModal(props) {
 						{error}
 					</p>
 				)}
-				<div>
-					<label htmlFor='title'>Title:</label>
-					<input required ref={titleRef} className='inputField' type='text' id='title' value={inputs.title} onChange={handleInputChange} />
-				</div>
-				<div>
-					<label htmlFor='artist_id'>Artist:</label>
-					<ArtistCombobox
-						artists={artists}
-						value={inputs.artist_id}
-						onChange={(id) => handleInputChange({ target: { id: 'artist_id', value: id } })}
-					/>
-				</div>
-				<div>
-					<label htmlFor='genre'>Genre:</label>
-					<input className='inputField' type='text' id='genre' value={inputs.genre} onChange={handleInputChange} />
-				</div>
-				<div>
-					<label htmlFor='label'>Label:</label>
-					<input className='inputField' type='text' id='label' value={inputs.label} onChange={handleInputChange} />
-				</div>
-				<div>
-					<label htmlFor='release_date'>Release date:</label>
-					<input className='inputField' type='date' id='release_date' value={inputs.release_date || ''} onChange={handleInputChange} />
-				</div>
-				<div>
-					<label htmlFor='acquired_date'>Acquired date:</label>
-					<input className='inputField' type='date' id='acquired_date' value={inputs.acquired_date || ''} onChange={handleInputChange} />
-				</div>
-				<div>
-					<label htmlFor='photo_url'>Photo URL:</label>
-					<input className='inputField' type='text' id='photo_url' value={inputs.photo_url} onChange={handleInputChange} />
-				</div>
-				<div>
-					<label htmlFor='notes'>Notes:</label>
-					<input className='inputField' type='text' id='notes' value={inputs.notes} onChange={handleInputChange} />
+				<div className='editInputs'>
+					<div>
+						<label htmlFor='title'>Title:</label>
+						<input required ref={titleRef} className='inputField' type='text' id='title' value={inputs.title} onChange={handleInputChange} />
+					</div>
+					<div>
+						<label htmlFor='artist_id'>Artist:</label>
+						<ArtistCombobox
+							artists={artists}
+							value={inputs.artist_id}
+							onChange={(id) => handleInputChange({ target: { id: 'artist_id', value: id } })}
+						/>
+					</div>
+					<div>
+						<label htmlFor='genre'>Genre:</label>
+						<input className='inputField' type='text' id='genre' value={inputs.genre} onChange={handleInputChange} />
+					</div>
+					<div>
+						<label htmlFor='label'>Label:</label>
+						<input className='inputField' type='text' id='label' value={inputs.label} onChange={handleInputChange} />
+					</div>
+					<div>
+						<label htmlFor='release_date'>Release date:</label>
+						<input className='inputField' type='date' id='release_date' value={inputs.release_date || ''} onChange={handleInputChange} />
+					</div>
+					<div>
+						<label htmlFor='acquired_date'>Acquired date:</label>
+						<input className='inputField' type='date' id='acquired_date' value={inputs.acquired_date || ''} onChange={handleInputChange} />
+					</div>
+					<div>
+						<label htmlFor='photo_url'>Photo URL:</label>
+						<input className='inputField' type='text' id='photo_url' value={inputs.photo_url} onChange={handleInputChange} />
+					</div>
+					<div>
+						<label htmlFor='notes'>Notes:</label>
+						<textarea className='inputField notes-input' id='notes' value={inputs.notes} onChange={handleInputChange} />
+					</div>
 				</div>
 				<div className='tracklist-edit'>
 					<h6 className='tracklist-title'>Tracklist</h6>

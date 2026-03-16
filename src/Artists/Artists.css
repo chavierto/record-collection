@@ -8,29 +8,30 @@
 .artists-page h4 {
 	font-family: 'Oswald', sans-serif;
 	font-weight: 400;
-	margin-bottom: 1.25rem;
+	margin: 0;
 }
 
-/* Toolbar: add button + search */
+/* Header row: title + add button */
 
-.artists-toolbar {
+.artists-header {
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	justify-content: space-between;
-	gap: 1rem;
 	margin-bottom: 1.25rem;
-	flex-wrap: wrap;
 }
+
+/* Search bar */
 
 .artist-search-wrapper {
 	position: relative;
 	display: flex;
 	align-items: center;
+	margin-bottom: 1.25rem;
 }
 
 .artist-search {
 	padding-right: 1.75rem;
-	width: 180px;
+	width: 100%;
 }
 
 .artist-search-clear {
@@ -114,7 +115,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.4rem;
-	max-width: 280px;
+	margin-bottom: 1.25rem;
 }
 
 .artist-form-actions {
