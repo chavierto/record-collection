@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import {
 	DndContext,
 	closestCenter,
@@ -17,6 +15,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import useEditRecord from '../EditRecordHook';
 import ArtistCombobox from '../ArtistCombobox/ArtistCombobox';
+import BottomSheet from '../BottomSheet/BottomSheet';
 import axios from '../axios';
 import requests from '../requests';
 import './RecordModal.css';
@@ -69,19 +68,13 @@ function SortableTrackItem({ song, onEdit, onDelete, editingId }) {
 							className='inputField track-num-input'
 							type='text'
 							value={editTrack}
-							onChange={(e) => {
-								const val = e.target.value;
-								setEditTrack(val);
-							}}
+							onChange={(e) => setEditTrack(e.target.value)}
 						/>
 						<input
 							className='inputField track-title-input'
 							type='text'
 							value={editTitle}
-							onChange={(e) => {
-								const val = e.target.value;
-								setEditTitle(val);
-							}}
+							onChange={(e) => setEditTitle(e.target.value)}
 						/>
 					</div>
 					<div className='track-edit-actions'>
@@ -144,7 +137,6 @@ function RecordModal(props) {
 
 	const sensors = useSensors(useSensor(PointerSensor));
 
-	// Reset modal state when a different record is opened
 	useEffect(() => {
 		setIsEditing(false);
 		setIsConfirmingDelete(false);
@@ -154,30 +146,22 @@ function RecordModal(props) {
 		setSongs(currentRecord.songs || []);
 	}, [currentRecord.id]);
 
-	// Keep songs in sync when currentRecord updates
 	useEffect(() => {
 		setSongs(currentRecord.songs || []);
 	}, [currentRecord.songs]);
 
-	// Fetch artists when entering edit mode
 	useEffect(() => {
 		if (isEditing) {
 			axios.get(requests.postArtistURL).then((res) => setArtists(res.data));
 		}
 	}, [isEditing]);
 
-	// Focus title input when edit mode opens
 	useEffect(() => {
-		if (isEditing && titleRef.current) {
-			titleRef.current.focus();
-		}
+		if (isEditing && titleRef.current) titleRef.current.focus();
 	}, [isEditing]);
 
-	// Focus track title input when add track form opens
 	useEffect(() => {
-		if (showAddTrack && newTrackTitleRef.current) {
-			newTrackTitleRef.current.focus();
-		}
+		if (showAddTrack && newTrackTitleRef.current) newTrackTitleRef.current.focus();
 	}, [showAddTrack]);
 
 	const onSuccess = (updatedRecord) => {
@@ -210,30 +194,15 @@ function RecordModal(props) {
 	const handleDeleteSong = (songId) => {
 		setSongError('');
 		axios.delete(requests.songDetailURL(songId))
-			.then(() => {
-				setSongs((prev) => prev.filter((s) => s.id !== songId));
-			})
+			.then(() => setSongs((prev) => prev.filter((s) => s.id !== songId)))
 			.catch(() => setSongError('Could not delete track. Please try again.'));
 	};
 
 	const handleEditSong = (songId, track, title) => {
-		if (songId === null) {
-			// Cancel
-			setEditingId(null);
-			return;
-		}
-		if (track === null && title === null) {
-			// Enter edit mode
-			setSongError('');
-			setEditingId(songId);
-			return;
-		}
-		// Save
+		if (songId === null) { setEditingId(null); return; }
+		if (track === null && title === null) { setSongError(''); setEditingId(songId); return; }
 		axios
-			.patch(requests.songDetailURL(songId), {
-				track: track || null,
-				title,
-			})
+			.patch(requests.songDetailURL(songId), { track: track || null, title })
 			.then((res) => {
 				setSongs((prev) =>
 					prev.map((s) => (s.id === songId ? { ...s, track: res.data.track, title: res.data.title } : s))
@@ -246,12 +215,10 @@ function RecordModal(props) {
 	const handleDragEnd = (event) => {
 		const { active, over } = event;
 		if (!over || active.id === over.id) return;
-
 		setSongs((prev) => {
 			const oldIndex = prev.findIndex((s) => s.id === active.id);
 			const newIndex = prev.findIndex((s) => s.id === over.id);
-			const reordered = arrayMove(prev, oldIndex, newIndex);
-			return reordered.map((song, i) => ({ ...song, track: i + 1 }));
+			return arrayMove(prev, oldIndex, newIndex).map((song, i) => ({ ...song, track: i + 1 }));
 		});
 	};
 
@@ -267,13 +234,11 @@ function RecordModal(props) {
 		Promise.all(patches).then(() => performUpdate());
 	};
 
-	const { inputs, handleInputChange, handleUpdate, performUpdate, handleDelete, error } =
+	const { inputs, handleInputChange, performUpdate, handleDelete, error } =
 		useEditRecord(currentRecord, onSuccess);
 
 	const currentSongs = currentRecord.songs || [];
-	const songOrderChanged = songs.some(
-		(s, i) => !currentSongs[i] || s.id !== currentSongs[i].id
-	);
+	const songOrderChanged = songs.some((s, i) => !currentSongs[i] || s.id !== currentSongs[i].id);
 
 	const isDirty =
 		inputs.title !== (currentRecord.title || '') ||
@@ -286,7 +251,7 @@ function RecordModal(props) {
 		inputs.notes !== (currentRecord.notes || '') ||
 		songOrderChanged;
 
-	const handleModalClose = () => {
+	const handleSheetClose = () => {
 		if (isEditing && isDirty) return;
 		if (isEditing) {
 			setIsEditing(false);
@@ -299,33 +264,17 @@ function RecordModal(props) {
 
 	const readView = (
 		<>
-			<Modal.Body>
+			<div className='sheet-body'>
 				{currentRecord.photo_url && (
-					<img
-						className='modal-img'
-						alt={currentRecord.title}
-						src={currentRecord.photo_url}
-					/>
+					<img className='modal-img' alt={currentRecord.title} src={currentRecord.photo_url} />
 				)}
 				<div className='modal-details'>
-					{currentRecord.artist_string && (
-						<p>Artist: {currentRecord.artist_string}</p>
-					)}
-					{currentRecord.genre && (
-						<p>Genre: {currentRecord.genre}</p>
-					)}
-					{currentRecord.label && (
-						<p>Label: {currentRecord.label}</p>
-					)}
-					{currentRecord.release_date && (
-						<p>Release date: {formatDate(currentRecord.release_date)}</p>
-					)}
-					{currentRecord.acquired_date && (
-						<p>Acquired date: {formatDate(currentRecord.acquired_date)}</p>
-					)}
-					{currentRecord.notes && (
-						<p className='note'>{currentRecord.notes}</p>
-					)}
+					{currentRecord.artist_string && <p>Artist: {currentRecord.artist_string}</p>}
+					{currentRecord.genre && <p>Genre: {currentRecord.genre}</p>}
+					{currentRecord.label && <p>Label: {currentRecord.label}</p>}
+					{currentRecord.release_date && <p>Release date: {formatDate(currentRecord.release_date)}</p>}
+					{currentRecord.acquired_date && <p>Acquired date: {formatDate(currentRecord.acquired_date)}</p>}
+					{currentRecord.notes && <p className='note'>{currentRecord.notes}</p>}
 				</div>
 				{songs.length > 0 && (
 					<div className='tracklist'>
@@ -340,8 +289,8 @@ function RecordModal(props) {
 						</ol>
 					</div>
 				)}
-			</Modal.Body>
-			<Modal.Footer style={{ justifyContent: 'space-between' }}>
+			</div>
+			<div className='sheet-footer'>
 				{isConfirmingDelete ? (
 					<>
 						<span>Delete <strong>{currentRecord.title}</strong>? This cannot be undone.</span>
@@ -369,13 +318,13 @@ function RecordModal(props) {
 						</button>
 					</>
 				)}
-			</Modal.Footer>
+			</div>
 		</>
 	);
 
 	const editView = (
 		<form onSubmit={handleSaveWithReorder} autoComplete='off'>
-			<Modal.Body>
+			<div className='sheet-body'>
 				{error && (
 					<p role='alert' style={{ color: '#b94a48', fontWeight: 'bold' }}>
 						{error}
@@ -383,15 +332,7 @@ function RecordModal(props) {
 				)}
 				<div>
 					<label htmlFor='title'>Title:</label>
-					<input
-						required
-						ref={titleRef}
-						className='inputField'
-						type='text'
-						id='title'
-						value={inputs.title}
-						onChange={handleInputChange}
-					/>
+					<input required ref={titleRef} className='inputField' type='text' id='title' value={inputs.title} onChange={handleInputChange} />
 				</div>
 				<div>
 					<label htmlFor='artist_id'>Artist:</label>
@@ -403,65 +344,28 @@ function RecordModal(props) {
 				</div>
 				<div>
 					<label htmlFor='genre'>Genre:</label>
-					<input
-						className='inputField'
-						type='text'
-						id='genre'
-						value={inputs.genre}
-						onChange={handleInputChange}
-					/>
+					<input className='inputField' type='text' id='genre' value={inputs.genre} onChange={handleInputChange} />
 				</div>
 				<div>
 					<label htmlFor='label'>Label:</label>
-					<input
-						className='inputField'
-						type='text'
-						id='label'
-						value={inputs.label}
-						onChange={handleInputChange}
-					/>
+					<input className='inputField' type='text' id='label' value={inputs.label} onChange={handleInputChange} />
 				</div>
 				<div>
 					<label htmlFor='release_date'>Release date:</label>
-					<input
-						className='inputField'
-						type='date'
-						id='release_date'
-						value={inputs.release_date || ''}
-						onChange={handleInputChange}
-					/>
+					<input className='inputField' type='date' id='release_date' value={inputs.release_date || ''} onChange={handleInputChange} />
 				</div>
 				<div>
 					<label htmlFor='acquired_date'>Acquired date:</label>
-					<input
-						className='inputField'
-						type='date'
-						id='acquired_date'
-						value={inputs.acquired_date || ''}
-						onChange={handleInputChange}
-					/>
+					<input className='inputField' type='date' id='acquired_date' value={inputs.acquired_date || ''} onChange={handleInputChange} />
 				</div>
 				<div>
 					<label htmlFor='photo_url'>Photo URL:</label>
-					<input
-						className='inputField'
-						type='text'
-						id='photo_url'
-						value={inputs.photo_url}
-						onChange={handleInputChange}
-					/>
+					<input className='inputField' type='text' id='photo_url' value={inputs.photo_url} onChange={handleInputChange} />
 				</div>
 				<div>
 					<label htmlFor='notes'>Notes:</label>
-					<input
-						className='inputField'
-						type='text'
-						id='notes'
-						value={inputs.notes}
-						onChange={handleInputChange}
-					/>
+					<input className='inputField' type='text' id='notes' value={inputs.notes} onChange={handleInputChange} />
 				</div>
-
 				<div className='tracklist-edit'>
 					<h6 className='tracklist-title'>Tracklist</h6>
 					{songError && (
@@ -470,13 +374,8 @@ function RecordModal(props) {
 						</p>
 					)}
 					{songs.length > 0 && (
-						<DndContext
-							sensors={sensors}
-							collisionDetection={closestCenter}
-							onDragEnd={handleDragEnd}>
-							<SortableContext
-								items={songs.map((s) => s.id)}
-								strategy={verticalListSortingStrategy}>
+						<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+							<SortableContext items={songs.map((s) => s.id)} strategy={verticalListSortingStrategy}>
 								<ul className='tracklist-edit-items'>
 									{songs.map((song) => (
 										<SortableTrackItem
@@ -498,10 +397,7 @@ function RecordModal(props) {
 								type='text'
 								placeholder='#'
 								value={newTrack.track}
-								onChange={(e) => {
-									const val = e.target.value;
-									setNewTrack((t) => ({ ...t, track: val }));
-								}}
+								onChange={(e) => setNewTrack((t) => ({ ...t, track: e.target.value }))}
 							/>
 							<input
 								ref={newTrackTitleRef}
@@ -509,26 +405,17 @@ function RecordModal(props) {
 								type='text'
 								placeholder='Track title'
 								value={newTrack.title}
-								onChange={(e) => {
-									const val = e.target.value;
-									setNewTrack((t) => ({ ...t, title: val }));
-								}}
+								onChange={(e) => setNewTrack((t) => ({ ...t, title: e.target.value }))}
 							/>
 							<div className='add-track-actions'>
 								<button
 									type='button'
 									className='modal-btn'
 									style={{ marginRight: '8px' }}
-									onClick={() => {
-										setShowAddTrack(false);
-										setNewTrack({ track: '', title: '' });
-									}}>
+									onClick={() => { setShowAddTrack(false); setNewTrack({ track: '', title: '' }); }}>
 									Cancel
 								</button>
-								<button
-									type='button'
-									className='modal-btn'
-									onClick={handleAddSong}>
+								<button type='button' className='modal-btn' onClick={handleAddSong}>
 									Add
 								</button>
 							</div>
@@ -545,8 +432,8 @@ function RecordModal(props) {
 						</button>
 					)}
 				</div>
-			</Modal.Body>
-			<Modal.Footer style={{ justifyContent: 'space-between' }}>
+			</div>
+			<div className='sheet-footer'>
 				<button
 					className='modal-btn'
 					type='button'
@@ -560,17 +447,14 @@ function RecordModal(props) {
 				<button className='modal-btn' type='submit'>
 					Save
 				</button>
-			</Modal.Footer>
+			</div>
 		</form>
 	);
 
 	return (
-		<Modal centered show={props.show} onHide={handleModalClose}>
-			<ModalHeader closeButton>
-				<Modal.Title>{currentRecord.title}</Modal.Title>
-			</ModalHeader>
+		<BottomSheet show={props.show} onClose={handleSheetClose} title={currentRecord.title}>
 			{isEditing ? editView : readView}
-		</Modal>
+		</BottomSheet>
 	);
 }
 
