@@ -163,6 +163,7 @@ function NewRecord(props) {
 							type='text'
 							name='label'
 							id='label'
+							value={inputs.label}
 							onChange={handleInputChange}></input>
 					</div>
 					<div>
@@ -200,7 +201,7 @@ function NewRecord(props) {
 						<label>Notes:</label>
 						<textarea
 							className='inputField notes-input'
-							name='body'
+							name='notes'
 							id='notes'
 							value={inputs.notes}
 							onChange={handleInputChange}

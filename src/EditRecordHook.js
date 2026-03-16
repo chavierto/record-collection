@@ -13,6 +13,7 @@ function useEditRecord(initialRecord, onSuccess) {
 		photo_url: initialRecord.photo_url || '',
 		notes: initialRecord.notes || '',
 	});
+	const [error, setError] = useState('');
 
 	useEffect(() => {
 		setInputs({
@@ -27,7 +28,6 @@ function useEditRecord(initialRecord, onSuccess) {
 		});
 		setError('');
 	}, [initialRecord.id]);
-	const [error, setError] = useState('');
 
 	const handleInputChange = (event) => {
 		if (event.persist) event.persist();
