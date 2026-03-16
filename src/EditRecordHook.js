@@ -46,7 +46,13 @@ function useEditRecord(initialRecord, onSuccess) {
 		return axios
 			.put(requests.albumDetailURL(initialRecord.id), updatedAlbum)
 			.then((res) => onSuccess(res.data))
-			.catch(() => setError('Something went wrong. Please try again.'));
+			.catch((err) => {
+				if (err.response?.status === 404) {
+					setError('This album no longer exists — it may have been deleted from another device.');
+				} else {
+					setError('Something went wrong. Please try again.');
+				}
+			});
 	};
 
 	const handleUpdate = (event) => {
@@ -58,7 +64,13 @@ function useEditRecord(initialRecord, onSuccess) {
 		axios
 			.delete(requests.albumDetailURL(initialRecord.id))
 			.then(() => onSuccess(null))
-			.catch(() => setError('Something went wrong. Please try again.'));
+			.catch((err) => {
+				if (err.response?.status === 404) {
+					setError('This album no longer exists — it may have been deleted from another device.');
+				} else {
+					setError('Something went wrong. Please try again.');
+				}
+			});
 	};
 
 	return {

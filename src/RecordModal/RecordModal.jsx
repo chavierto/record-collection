@@ -265,6 +265,11 @@ function RecordModal(props) {
 	const readView = (
 		<>
 			<div className='sheet-body'>
+				{error && (
+					<p role='alert' style={{ color: '#b94a48', fontWeight: 'bold' }}>
+						{error}
+					</p>
+				)}
 				{currentRecord.photo_url && (
 					<img className='modal-img' alt={currentRecord.title} src={currentRecord.photo_url} />
 				)}

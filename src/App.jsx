@@ -20,18 +20,31 @@ function AppContent() {
 	const [sortAsc, setSortAsc] = useState(true);
 	const location = useLocation();
 
-	useEffect(() => {
-		async function getRecords() {
-			try {
-				const result = await axios.get(requests.postAlbumURL);
-				setData(result.data);
-				setLoadError(false);
-			} catch {
-				setLoadError(true);
-			}
+	async function getRecords() {
+		try {
+			const result = await axios.get(requests.postAlbumURL);
+			setData(result.data);
+			setLoadError(false);
+		} catch {
+			setLoadError(true);
 		}
+	}
+
+	useEffect(() => {
 		getRecords();
 	}, [location]);
+
+	useEffect(() => {
+		const interval = setInterval(getRecords, 30000);
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible') getRecords();
+		};
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+		return () => {
+			clearInterval(interval);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
+	}, []);
 
 	const handleShow = (record) => {
 		setShow(true);
