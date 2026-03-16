@@ -6,6 +6,7 @@ import './Artists.css';
 function Artists() {
 	const [artists, setArtists] = useState([]);
 	const [loadError, setLoadError] = useState(false);
+	const [searchQuery, setSearchQuery] = useState('');
 
 	const [showAdd, setShowAdd] = useState(false);
 	const [newName, setNewName] = useState('');
@@ -13,10 +14,13 @@ function Artists() {
 
 	const [editingId, setEditingId] = useState(null);
 	const [editName, setEditName] = useState('');
+	const [editPhotoUrl, setEditPhotoUrl] = useState('');
+	const [editNotes, setEditNotes] = useState('');
 	const [editError, setEditError] = useState('');
 
 	const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 	const [deleteError, setDeleteError] = useState('');
+	const [protectedMessageId, setProtectedMessageId] = useState(null);
 
 	const addInputRef = useRef(null);
 	const editInputRef = useRef(null);
@@ -59,9 +63,12 @@ function Artists() {
 	const handleEditStart = (artist) => {
 		setEditingId(artist.id);
 		setEditName(artist.artist);
+		setEditPhotoUrl(artist.photo_url || '');
+		setEditNotes(artist.notes || '');
 		setEditError('');
 		setConfirmDeleteId(null);
 		setDeleteError('');
+		setProtectedMessageId(null);
 	};
 
 	const handleEditSave = (id) => {
@@ -69,7 +76,11 @@ function Artists() {
 		if (!trimmed) return;
 		setEditError('');
 		axios
-			.patch(requests.artistDetailURL(id), { artist: trimmed })
+			.patch(requests.artistDetailURL(id), {
+				artist: trimmed,
+				photo_url: editPhotoUrl || null,
+				notes: editNotes || null,
+			})
 			.then((res) => {
 				setArtists((prev) => prev.map((a) => (a.id === id ? res.data : a)));
 				setEditingId(null);
@@ -86,6 +97,14 @@ function Artists() {
 	const handleEditCancel = () => {
 		setEditingId(null);
 		setEditError('');
+	};
+
+	const handleDeleteClick = (artist) => {
+		if (artist.album_count > 0) {
+			setProtectedMessageId(protectedMessageId === artist.id ? null : artist.id);
+			return;
+		}
+		setConfirmDeleteId(artist.id);
 	};
 
 	const handleDelete = (id) => {
@@ -108,45 +127,70 @@ function Artists() {
 			});
 	};
 
+	const filtered = artists.filter((a) =>
+		a.artist.toLowerCase().includes(searchQuery.toLowerCase())
+	);
+
 	return (
 		<div className='artists-page'>
 			<h4>Artists</h4>
 
-			{showAdd ? (
-				<div className='artist-add-form'>
+			<div className='artists-toolbar'>
+				{showAdd ? (
+					<div className='artist-add-form'>
+						<input
+							ref={addInputRef}
+							className='inputField'
+							type='text'
+							placeholder='Artist name'
+							value={newName}
+							onChange={(e) => setNewName(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
+								if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setAddError(''); }
+							}}
+						/>
+						{addError && <span role='alert' className='formError'>{addError}</span>}
+						<div className='artist-form-actions'>
+							<button
+								type='button'
+								className='artist-btn'
+								onClick={() => { setShowAdd(false); setNewName(''); setAddError(''); }}>
+								Cancel
+							</button>
+							<button type='button' className='artist-btn' onClick={handleAdd}>
+								Add
+							</button>
+						</div>
+					</div>
+				) : (
+					<button
+						type='button'
+						className='artist-btn'
+						onClick={() => setShowAdd(true)}>
+						+ Add Artist
+					</button>
+				)}
+
+				<div className='artist-search-wrapper'>
 					<input
-						ref={addInputRef}
-						className='inputField'
+						className='inputField artist-search'
 						type='text'
-						placeholder='Artist name'
-						value={newName}
-						onChange={(e) => setNewName(e.target.value)}
-						onKeyDown={(e) => {
-							if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
-							if (e.key === 'Escape') { setShowAdd(false); setNewName(''); setAddError(''); }
-						}}
+						placeholder='Search artists...'
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
-					{addError && <span role='alert' className='formError'>{addError}</span>}
-					<div className='artist-form-actions'>
+					{searchQuery && (
 						<button
 							type='button'
-							className='artist-btn'
-							onClick={() => { setShowAdd(false); setNewName(''); setAddError(''); }}>
-							Cancel
+							className='artist-search-clear'
+							onClick={() => setSearchQuery('')}
+							aria-label='Clear search'>
+							✕
 						</button>
-						<button type='button' className='artist-btn' onClick={handleAdd}>
-							Add
-						</button>
-					</div>
+					)}
 				</div>
-			) : (
-				<button
-					type='button'
-					className='artist-btn artist-btn-add'
-					onClick={() => setShowAdd(true)}>
-					+ Add Artist
-				</button>
-			)}
+			</div>
 
 			{loadError && (
 				<p className='formError' style={{ marginTop: '1rem' }}>
@@ -160,85 +204,119 @@ function Artists() {
 			)}
 
 			<ul className='artist-list'>
-				{artists.map((artist) => (
-					<li key={artist.id} className='artist-row'>
-						{editingId === artist.id ? (
-							<>
-								<div className='artist-row-main'>
-									<input
-										ref={editInputRef}
-										className='inputField artist-edit-input'
-										type='text'
-										value={editName}
-										onChange={(e) => setEditName(e.target.value)}
-										onKeyDown={(e) => {
-											if (e.key === 'Enter') { e.preventDefault(); handleEditSave(artist.id); }
-											if (e.key === 'Escape') handleEditCancel();
-										}}
-									/>
-									{editError && (
-										<span role='alert' className='formError'>{editError}</span>
-									)}
-								</div>
-								<div className='artist-row-actions'>
-									<button type='button' className='artist-btn' onClick={handleEditCancel}>
-										Cancel
-									</button>
-									<button type='button' className='artist-btn' onClick={() => handleEditSave(artist.id)}>
-										Save
-									</button>
-								</div>
-							</>
-						) : confirmDeleteId === artist.id ? (
-							<>
-								<div className='artist-row-main'>
-									<span className='artist-confirm-text'>
-										Delete <strong>{artist.artist}</strong>? This cannot be undone.
-									</span>
-								</div>
-								<div className='artist-row-actions'>
-									<button
-										type='button'
-										className='artist-btn'
-										onClick={() => setConfirmDeleteId(null)}>
-										Cancel
-									</button>
-									<button
-										type='button'
-										className='artist-btn artist-btn-danger'
-										onClick={() => handleDelete(artist.id)}>
-										Yes, delete
-									</button>
-								</div>
-							</>
-						) : (
-							<>
-								<div className='artist-row-main'>
-									<span className='artist-name'>{artist.artist}</span>
-									<span className='artist-album-count'>
-										{artist.album_count} {artist.album_count === 1 ? 'album' : 'albums'}
-									</span>
-								</div>
-								<div className='artist-row-actions'>
-									<button
-										type='button'
-										className='artist-btn'
-										onClick={() => handleEditStart(artist)}>
-										Edit
-									</button>
-									<button
-										type='button'
-										className='artist-btn artist-btn-danger'
-										disabled={artist.album_count > 0}
-										title={artist.album_count > 0 ? "Remove this artist's albums before deleting" : ''}
-										onClick={() => setConfirmDeleteId(artist.id)}>
-										Delete
-									</button>
-								</div>
-							</>
+				{filtered.map((artist) => (
+					<li key={artist.id} className='artist-list-item'>
+						<div className='artist-row'>
+							{editingId === artist.id ? (
+								<>
+									<div className='artist-edit-form'>
+										<input
+											ref={editInputRef}
+											className='inputField'
+											type='text'
+											placeholder='Name'
+											value={editName}
+											onChange={(e) => setEditName(e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Escape') handleEditCancel();
+											}}
+										/>
+										<input
+											className='inputField'
+											type='text'
+											placeholder='Photo URL'
+											value={editPhotoUrl}
+											onChange={(e) => setEditPhotoUrl(e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Escape') handleEditCancel();
+											}}
+										/>
+										<input
+											className='inputField'
+											type='text'
+											placeholder='Notes'
+											value={editNotes}
+											onChange={(e) => setEditNotes(e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Escape') handleEditCancel();
+											}}
+										/>
+										{editError && (
+											<span role='alert' className='formError'>{editError}</span>
+										)}
+									</div>
+									<div className='artist-row-actions'>
+										<button type='button' className='artist-btn' onClick={handleEditCancel}>
+											Cancel
+										</button>
+										<button type='button' className='artist-btn' onClick={() => handleEditSave(artist.id)}>
+											Save
+										</button>
+									</div>
+								</>
+							) : confirmDeleteId === artist.id ? (
+								<>
+									<div className='artist-row-main'>
+										<span className='artist-confirm-text'>
+											Delete <strong>{artist.artist}</strong>? This cannot be undone.
+										</span>
+									</div>
+									<div className='artist-row-actions'>
+										<button
+											type='button'
+											className='artist-btn'
+											onClick={() => setConfirmDeleteId(null)}>
+											Cancel
+										</button>
+										<button
+											type='button'
+											className='artist-btn artist-btn-danger'
+											onClick={() => handleDelete(artist.id)}>
+											Yes, delete
+										</button>
+									</div>
+								</>
+							) : (
+								<>
+									<div className='artist-row-main'>
+										<span className='artist-name'>{artist.artist}</span>
+										<span className='artist-album-count'>
+											{artist.album_count} {artist.album_count === 1 ? 'album' : 'albums'}
+										</span>
+									</div>
+									<div className='artist-row-actions'>
+										<button
+											type='button'
+											className='artist-btn'
+											onClick={() => handleEditStart(artist)}>
+											Edit
+										</button>
+										<div
+											className='artist-delete-wrapper'
+											data-tooltip={artist.album_count > 0 ? "Remove this artist's albums before deleting" : undefined}>
+											<button
+												type='button'
+												className={`artist-btn artist-btn-danger${artist.album_count > 0 ? ' artist-btn-protected' : ''}`}
+												onClick={() => handleDeleteClick(artist)}>
+												Delete
+											</button>
+										</div>
+									</div>
+								</>
+							)}
+						</div>
+						{protectedMessageId === artist.id && (
+							<p className='artist-protected-msg'>
+								{artist.artist} has {artist.album_count} {artist.album_count === 1 ? 'album' : 'albums'} and can't be deleted. Remove their albums first.
+							</p>
 						)}
 					</li>
 				))}
+				{filtered.length === 0 && !loadError && (
+					<li className='artist-empty'>
+						{searchQuery ? 'No artists match your search.' : 'No artists yet.'}
+					</li>
+				)}
 			</ul>
 		</div>
 	);
