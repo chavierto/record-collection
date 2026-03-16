@@ -94,19 +94,21 @@
 	position: relative;
 }
 
-.artist-delete-wrapper[data-tooltip]:hover::after {
-	content: attr(data-tooltip);
-	position: absolute;
-	bottom: calc(100% + 6px);
-	right: 0;
-	background: #333333;
-	color: #eeeeee;
-	padding: 0.25rem 0.5rem;
-	font-size: 0.75rem;
-	font-family: 'Oswald', sans-serif;
-	white-space: nowrap;
-	pointer-events: none;
-	z-index: 10;
+@media (hover: hover) {
+	.artist-delete-wrapper[data-tooltip]:hover::after {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: calc(100% + 6px);
+		right: 0;
+		background: #333333;
+		color: #eeeeee;
+		padding: 0.25rem 0.5rem;
+		font-size: 0.75rem;
+		font-family: 'Oswald', sans-serif;
+		white-space: nowrap;
+		pointer-events: none;
+		z-index: 10;
+	}
 }
 
 /* Add form */

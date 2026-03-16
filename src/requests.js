@@ -1,5 +1,9 @@
+const devUrl = import.meta.env.DEV
+	? `http://${window.location.hostname}:8000`
+	: import.meta.env.VITE_PROD_URL;
+
 const requests = {
-	baseUrl: `${import.meta.env.DEV ? import.meta.env.VITE_DEV_URL : import.meta.env.VITE_PROD_URL}`,
+	baseUrl: devUrl,
 	postAlbumURL: `/albums`,
 	postSongURL: `/songs`,
 	postArtistURL: `/artists`,
