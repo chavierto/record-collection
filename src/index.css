@@ -31,6 +31,39 @@ code {
 	border-color: #333333;
 }
 
+input[type="date"].inputField {
+	font-size: 16px;
+	-webkit-appearance: none;
+	font-family: 'Oswald', sans-serif;
+	min-height: 2rem;
+}
+
+.field-with-clear {
+	position: relative;
+}
+
+.field-with-clear .inputField {
+	padding-right: 1.75rem;
+}
+
+.search-clear {
+	position: absolute;
+	right: 0.4rem;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 0.75rem;
+	color: #888888;
+	padding: 0;
+	line-height: 1;
+}
+
+.search-clear:hover {
+	color: #333333;
+}
+
 .notes-input {
 	resize: vertical;
 	min-height: 4rem;

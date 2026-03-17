@@ -19,21 +19,6 @@
 	padding-right: 1.75rem;
 }
 
-.search-clear {
-	position: absolute;
-	right: 0.4rem;
-	background: none;
-	border: none;
-	cursor: pointer;
-	font-size: 0.75rem;
-	color: #888888;
-	padding: 0;
-	line-height: 1;
-}
-
-.search-clear:hover {
-	color: #333333;
-}
 
 .sort-controls {
 	display: flex;

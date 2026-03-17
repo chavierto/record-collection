@@ -358,11 +358,29 @@ function RecordModal(props) {
 					</div>
 					<div>
 						<label htmlFor='release_date'>Release date:</label>
-						<input className='inputField' type='date' id='release_date' value={inputs.release_date || ''} onChange={handleInputChange} />
+						<div className='field-with-clear'>
+							<input className='inputField' type='date' id='release_date' value={inputs.release_date || ''} onChange={handleInputChange} />
+							{inputs.release_date && (
+								<button
+									type='button'
+									className='search-clear'
+									onClick={() => handleInputChange({ target: { id: 'release_date', value: '' } })}
+									aria-label='Clear date'>✕</button>
+							)}
+						</div>
 					</div>
 					<div>
 						<label htmlFor='acquired_date'>Acquired date:</label>
-						<input className='inputField' type='date' id='acquired_date' value={inputs.acquired_date || ''} onChange={handleInputChange} />
+						<div className='field-with-clear'>
+							<input className='inputField' type='date' id='acquired_date' value={inputs.acquired_date || ''} onChange={handleInputChange} />
+							{inputs.acquired_date && (
+								<button
+									type='button'
+									className='search-clear'
+									onClick={() => handleInputChange({ target: { id: 'acquired_date', value: '' } })}
+									aria-label='Clear date'>✕</button>
+							)}
+						</div>
 					</div>
 					<div>
 						<label htmlFor='photo_url'>Photo URL:</label>
