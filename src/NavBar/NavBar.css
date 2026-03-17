@@ -21,6 +21,12 @@
 	text-decoration: none;
 }
 
+.nav a,
+.nav a:visited {
+	color: white;
+	text-decoration: none;
+}
+
 .menu-list {
 	display: flex;
 	justify-content: space-between;
