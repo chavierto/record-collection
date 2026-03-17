@@ -10,18 +10,49 @@ import './NewRecord.css';
 function NewRecord(props) {
 	const { albums = [] } = props;
 	const history = useHistory();
-	const { inputs, handleInputChange, handleSubmit, setInputs, error } = useForm();
+	const { inputs, handleInputChange, setInputs, error: formError } = useForm();
 	const [artists, setArtists] = useState([]);
 	const [showNewArtist, setShowNewArtist] = useState(false);
 	const [newArtistName, setNewArtistName] = useState('');
 	const [newArtistError, setNewArtistError] = useState('');
 	const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
-	const [pendingSubmitEvent, setPendingSubmitEvent] = useState(null);
+	const [pendingSubmit, setPendingSubmit] = useState(false);
 	const [artistExistsNotice, setArtistExistsNotice] = useState('');
+	const [pendingTracks, setPendingTracks] = useState([]);
+	const [submitError, setSubmitError] = useState('');
 
 	useEffect(() => {
 		axios.get(requests.postArtistURL).then((res) => setArtists(res.data));
 	}, []);
+
+	const doSubmit = (inputsToSubmit) => {
+		setSubmitError('');
+		const newAlbum = {
+			...inputsToSubmit,
+			release_date: inputsToSubmit.release_date || null,
+			acquired_date: inputsToSubmit.acquired_date || null,
+		};
+		axios
+			.post(requests.postAlbumURL, newAlbum)
+			.then((res) => {
+				const albumId = res.data.id;
+				const artistId = res.data.artist_id;
+				if (pendingTracks.length > 0) {
+					return Promise.all(
+						pendingTracks.map((t) =>
+							axios.post(requests.postSongURL, {
+								track: t.position || null,
+								title: t.title,
+								album_id: albumId,
+								artist_id: artistId,
+							})
+						)
+					);
+				}
+			})
+			.then(() => history.push('/records'))
+			.catch(() => setSubmitError('Something went wrong. Please try again.'));
+	};
 
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
@@ -31,11 +62,11 @@ function NewRecord(props) {
 				String(a.artist_id) === String(inputs.artist_id)
 		);
 		if (duplicate) {
-			setPendingSubmitEvent(e);
+			setPendingSubmit(true);
 			setShowDuplicateWarning(true);
 			return;
 		}
-		handleSubmit(e);
+		doSubmit(inputs);
 	};
 
 	const handleDiscogsSelect = async (release) => {
@@ -47,6 +78,9 @@ function NewRecord(props) {
 		const primaryImage = release.images?.find((i) => i.type === 'primary')?.uri
 			|| release.images?.[0]?.uri
 			|| '';
+
+		const tracks = (release.tracklist || []).filter((t) => t.title && t.type_ !== 'heading');
+		setPendingTracks(tracks);
 
 		setInputs((prev) => ({
 			...prev,
@@ -74,7 +108,6 @@ function NewRecord(props) {
 				setArtistExistsNotice(`Artist created: ${created.artist}`);
 				setTimeout(() => setArtistExistsNotice(''), 3000);
 			} catch {
-				// Duplicate or error — find existing or fall back to manual
 				const existing = artists.find(
 					(a) => a.artist.toLowerCase() === artistName.toLowerCase()
 				);
@@ -91,8 +124,9 @@ function NewRecord(props) {
 	};
 
 	const handleConfirmDuplicate = () => {
-		handleSubmit(pendingSubmitEvent);
 		setShowDuplicateWarning(false);
+		setPendingSubmit(false);
+		doSubmit(inputs);
 	};
 
 	const handleAddArtist = () => {
@@ -125,11 +159,16 @@ function NewRecord(props) {
 			.catch(() => setNewArtistError('Something went wrong. Please try again.'));
 	};
 
+	const error = submitError || formError;
+
 	return (
 		<div className='new-record-page'>
 			<h4>New Record</h4>
 			<form onSubmit={handleFormSubmit} autoComplete='off'>
 				<DiscogsSearch onSelect={handleDiscogsSelect} />
+				{pendingTracks.length > 0 && (
+					<p className='tracklist-notice'>{pendingTracks.length} tracks ready to import</p>
+				)}
 				<div className='editInputs'>
 					<div>
 						<label>Title: </label>
@@ -293,7 +332,7 @@ function NewRecord(props) {
 								type='button'
 								className='new-artist-btn'
 								style={{ marginRight: '8px' }}
-								onClick={() => setShowDuplicateWarning(false)}>
+								onClick={() => { setShowDuplicateWarning(false); setPendingSubmit(false); }}>
 								Cancel
 							</button>
 							<button

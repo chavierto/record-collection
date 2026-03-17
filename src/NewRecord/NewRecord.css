@@ -78,6 +78,14 @@
 	gap: 0.5rem;
 }
 
+.tracklist-notice {
+	font-family: 'Oswald', sans-serif;
+	font-size: 0.85rem;
+	color: #2a7a2a;
+	margin: 0.25rem 0 0.75rem;
+	text-align: center;
+}
+
 .new-record-actions {
 	display: flex;
 	justify-content: center;

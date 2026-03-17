@@ -20,6 +20,12 @@ import axios from '../axios';
 import requests from '../requests';
 import './RecordModal.css';
 
+function sortSongs(songs) {
+	return [...songs].sort((a, b) =>
+		String(a.track ?? '').localeCompare(String(b.track ?? ''), undefined, { numeric: true, sensitivity: 'base' })
+	);
+}
+
 function formatDate(dateStr) {
 	if (!dateStr) return null;
 	const [year, month, day] = dateStr.split('-').map(Number);
@@ -143,11 +149,11 @@ function RecordModal(props) {
 		setShowAddTrack(false);
 		setNewTrack({ track: '', title: '' });
 		setEditingId(null);
-		setSongs(currentRecord.songs || []);
+		setSongs(sortSongs(currentRecord.songs || []));
 	}, [currentRecord.id]);
 
 	useEffect(() => {
-		setSongs(currentRecord.songs || []);
+		setSongs(sortSongs(currentRecord.songs || []));
 	}, [currentRecord.songs]);
 
 	useEffect(() => {
@@ -184,7 +190,7 @@ function RecordModal(props) {
 				album_id: currentRecord.id,
 			})
 			.then((res) => {
-				setSongs((prev) => [...prev, res.data]);
+				setSongs((prev) => sortSongs([...prev, res.data]));
 				setNewTrack({ track: '', title: '' });
 				setShowAddTrack(false);
 			})
@@ -255,7 +261,7 @@ function RecordModal(props) {
 		if (isEditing && isDirty) return;
 		if (isEditing) {
 			setIsEditing(false);
-			setSongs(currentRecord.songs || []);
+			setSongs(sortSongs(currentRecord.songs || []));
 			setEditingId(null);
 			return;
 		}
@@ -459,7 +465,7 @@ function RecordModal(props) {
 					type='button'
 					onClick={() => {
 						setIsEditing(false);
-						setSongs(currentRecord.songs || []);
+						setSongs(sortSongs(currentRecord.songs || []));
 						setEditingId(null);
 					}}>
 					Cancel
