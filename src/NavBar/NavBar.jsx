@@ -14,7 +14,11 @@ function NavBar() {
 					<Link to='/records/new'>Add Record</Link>
 				</li>
 				<li><Link to='/artists'>Artists</Link></li>
-				<li><UserButton afterSignOutUrl='/' /></li>
+				<li>
+					<div style={{ borderRadius: '50%', outline: '1.5px solid white', outlineOffset: '0px', lineHeight: 0 }}>
+						<UserButton afterSignOutUrl='/' />
+					</div>
+				</li>
 			</ul>
 		</nav>
 	);
