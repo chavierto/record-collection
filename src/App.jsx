@@ -1,16 +1,28 @@
-// App.js is the main document. Here I'm importing the dependencies I'm going to use.
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { useAuth } from '@clerk/react';
 import NavBar from './NavBar/NavBar';
 import RecordsList from './RecordsList/RecordsList';
 import NewRecord from './NewRecord/NewRecord';
 import Artists from './Artists/Artists';
+import Landing from './Landing/Landing';
+import SignInPage from './SignInPage/SignInPage';
 import SearchSort from './SearchSort/SearchSort';
-import axios from './axios';
+import axiosInstance from './axios';
 import requests from './requests';
 import './App.css';
 
-function AppContent() {
+function ProtectedRoute({ children, ...rest }) {
+	const { isSignedIn, isLoaded } = useAuth();
+	if (!isLoaded) return null;
+	return (
+		<Route {...rest} render={() =>
+			isSignedIn ? children : <Redirect to='/' />
+		} />
+	);
+}
+
+function AuthenticatedApp() {
 	const [data, setData] = useState([]);
 	const [loadError, setLoadError] = useState(false);
 	const [show, setShow] = useState(false);
@@ -22,7 +34,7 @@ function AppContent() {
 
 	async function getRecords() {
 		try {
-			const result = await axios.get(requests.postAlbumURL);
+			const result = await axiosInstance.get(requests.postAlbumURL);
 			setData(result.data);
 			setLoadError(false);
 		} catch {
@@ -93,10 +105,8 @@ function AppContent() {
 				<NavBar />
 			</nav>
 			<main>
-				<Route
-					path='/'
-					exact
-					render={() => (
+				<Switch>
+					<Route path='/records' exact render={() => (
 						<>
 							{loadError && (
 								<p style={{ textAlign: 'center', padding: '2rem', color: '#b94a48', fontFamily: "'Oswald', sans-serif" }}>
@@ -122,25 +132,48 @@ function AppContent() {
 								handleRecordDeleted={handleRecordDeleted}
 							/>
 						</>
-					)}
-				/>
-				<Route
-					path='/newrecord'
-					render={() => <NewRecord albums={data} />}
-				/>
-				<Route
-					path='/artists'
-					render={() => <Artists />}
-				/>
+					)} />
+					<Route path='/records/new' render={() => <NewRecord albums={data} />} />
+					<Route path='/artists' render={() => <Artists />} />
+				</Switch>
 			</main>
 		</div>
+	);
+}
+
+function AppRoutes() {
+	const { isSignedIn, isLoaded, getToken } = useAuth();
+
+	useEffect(() => {
+		const id = axiosInstance.interceptors.request.use(async (config) => {
+			const token = await getToken();
+			if (token) config.headers.Authorization = `Bearer ${token}`;
+			return config;
+		});
+		return () => axiosInstance.interceptors.request.eject(id);
+	}, [getToken]);
+
+	if (!isLoaded) return null;
+
+	return (
+		<Switch>
+			<Route path='/' exact render={() =>
+				isSignedIn ? <Redirect to='/records' /> : <Landing />
+			} />
+			<Route path='/sign-in' render={() =>
+				isSignedIn ? <Redirect to='/records' /> : <SignInPage />
+			} />
+			<ProtectedRoute path='/'>
+				<AuthenticatedApp />
+			</ProtectedRoute>
+		</Switch>
 	);
 }
 
 function App() {
 	return (
 		<Router>
-			<AppContent />
+			<AppRoutes />
 		</Router>
 	);
 }

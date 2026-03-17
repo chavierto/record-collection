@@ -234,7 +234,7 @@ function NewRecord(props) {
 					</div>
 				) : (
 					<div className='new-record-actions'>
-						<button type='button' className='submitButton' onClick={() => history.push('/')}>
+						<button type='button' className='submitButton' onClick={() => history.push('/records')}>
 							Cancel
 						</button>
 						<input type='submit' className='submitButton' />
