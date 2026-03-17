@@ -243,7 +243,7 @@ function RecordModal(props) {
 	const { inputs, handleInputChange, performUpdate, handleDelete, error } =
 		useEditRecord(currentRecord, onSuccess);
 
-	const currentSongs = currentRecord.songs || [];
+	const currentSongs = sortSongs(currentRecord.songs || []);
 	const songOrderChanged = songs.some((s, i) => !currentSongs[i] || s.id !== currentSongs[i].id);
 
 	const isDirty =
@@ -263,7 +263,6 @@ function RecordModal(props) {
 			setIsEditing(false);
 			setSongs(sortSongs(currentRecord.songs || []));
 			setEditingId(null);
-			return;
 		}
 		handleClose();
 	};
