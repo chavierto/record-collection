@@ -8,23 +8,17 @@
 	justify-content: space-between;
 }
 
-
 .nav-text {
-	display: none;
-	text-decoration: none;
-	margin: 0;
-}
-
-.nav-text,
-.nav-text-small:hover {
-	color: white;
-	text-decoration: none;
-}
-
-.nav-text-small {
 	font-size: 1.5rem;
 	font-weight: normal;
+	color: white;
+	text-decoration: none;
 	margin: 0;
+}
+
+.nav-text:hover {
+	color: white;
+	text-decoration: none;
 }
 
 .menu-list {
@@ -42,17 +36,4 @@ li {
 
 button {
 	border: 0;
-}
-
-@media (min-width: 650px) {
-	.nav-text {
-		display: block;
-		font-weight: normal;
-		font-size: 1.5rem;
-		margin: 0;
-	}
-
-	.nav-text-small {
-		display: none;
-	}
 }

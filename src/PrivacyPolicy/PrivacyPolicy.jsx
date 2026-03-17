@@ -10,7 +10,7 @@ function PrivacyPolicy() {
 
 				<section>
 					<h2>What this app is</h2>
-					<p>Record Collection is a personal vinyl catalog app. It lets you log, browse, and manage your record collection.</p>
+					<p>Deep Cuts is a personal vinyl catalog app. It lets you log, browse, and manage your record collection.</p>
 				</section>
 
 				<section>
