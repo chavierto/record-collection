@@ -295,35 +295,30 @@ function RecordModal(props) {
 					</div>
 				)}
 			</div>
-			<div className='sheet-footer'>
-				{isConfirmingDelete ? (
-					<>
-						<span>Delete <strong>{currentRecord.title}</strong>? This cannot be undone.</span>
-						<div>
-							<button
-								className='modal-btn'
-								onClick={() => setIsConfirmingDelete(false)}
-								style={{ marginRight: '8px' }}>
-								Cancel
-							</button>
-							<button className='modal-btn modal-btn-danger' onClick={handleDelete}>
-								Yes, delete
-							</button>
-						</div>
-					</>
-				) : (
-					<>
-						<button className='modal-btn' onClick={() => setIsEditing(true)}>
-							Edit
+			{isConfirmingDelete ? (
+				<div className='sheet-footer-confirm'>
+					<span>Delete <strong>{currentRecord.title}</strong>? This cannot be undone.</span>
+					<div className='sheet-footer-confirm-actions'>
+						<button className='modal-btn' onClick={() => setIsConfirmingDelete(false)}>
+							Cancel
 						</button>
-						<button
-							className='modal-btn modal-btn-danger'
-							onClick={() => setIsConfirmingDelete(true)}>
-							Delete
+						<button className='modal-btn modal-btn-danger' onClick={handleDelete}>
+							Yes, delete
 						</button>
-					</>
-				)}
-			</div>
+					</div>
+				</div>
+			) : (
+				<div className='sheet-footer'>
+					<button className='modal-btn' onClick={() => setIsEditing(true)}>
+						Edit
+					</button>
+					<button
+						className='modal-btn modal-btn-danger'
+						onClick={() => setIsConfirmingDelete(true)}>
+						Delete
+					</button>
+				</div>
+			)}
 		</>
 	);
 

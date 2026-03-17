@@ -42,6 +42,7 @@
 	padding: 1rem 0;
 	flex-shrink: 0;
 	cursor: grab;
+	touch-action: none;
 }
 
 .bottom-sheet-handle-bar {
@@ -53,7 +54,6 @@
 
 /* Drag zone (handle + header) */
 .bottom-sheet-drag-zone {
-	cursor: grab;
 	flex-shrink: 0;
 }
 
