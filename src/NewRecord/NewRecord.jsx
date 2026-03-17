@@ -99,8 +99,14 @@ function NewRecord(props) {
 			release_date: (() => {
 				const r = release.released;
 				if (!r) return release.year ? `${release.year}-01-01` : prev.release_date;
-				if (r.length === 10) return r;
-				if (r.length === 7) return `${r}-01`;
+				if (r.length === 10) {
+					const [y, m, d] = r.split('-');
+					return `${y}-${m === '00' ? '01' : m}-${d === '00' ? '01' : d}`;
+				}
+				if (r.length === 7) {
+					const [y, m] = r.split('-');
+					return `${y}-${m === '00' ? '01' : m}-01`;
+				}
 				if (r.length === 4) return `${r}-01-01`;
 				return prev.release_date;
 			})(),
