@@ -158,17 +158,32 @@ VITE_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
 
 <br>
 
+## Deployment
+
+- **Frontend:** Vercel — `https://deep-cuts.vercel.app`
+- **Backend:** Railway — `https://deepcuts.up.railway.app`
+
+Railway env vars required: `SECRET_KEY`, `MODE=production`, `DATABASE_URL` (linked from Postgres service), `CORS_ALLOWED_ORIGINS`, `CLERK_JWKS_URL`, `DISCOGS_TOKEN`
+
+Migrations run automatically on startup via `Procfile`.
+
+<br>
+
 ## Recent Improvements
 
 UX polish and features shipped:
 
+- **Deployed** — live at `https://deep-cuts.vercel.app` (Vercel + Railway + PostgreSQL)
+- **Discogs tracklist import** — tracks auto-imported when adding a record via Discogs search; imported silently on save with no intermediate state exposed to the user
+- **Tracklist sort fix** — natural sort (`localeCompare` with `numeric: true`) so track 10 sorts after 9, not after 1
+- **Edit modal dismiss fix** — X and swipe-down now correctly close the modal from edit mode when no changes have been made; dirty state comparison now uses sorted song order to prevent false positives on albums with tracklists
+- **Discogs date normalization** — handles Discogs `00` month/day components (e.g. `1969-08-00`) that Django would otherwise reject
+- **Pre-deployment hardening** — CORS locked to allowed origins in production; image proxy URL validation; serializer querysets scoped per user; submit button disabled while pending; lazy loading on album covers
 - **Google OAuth via Clerk** — full multi-user auth; JWT middleware scopes all data per user; landing page with sign-in flow; protected routes; user avatar + sign-out in navbar
 - **Discogs search and auto-fill** — debounced search widget on the Add Record form; toggle between "Any edition" (master) and "Exact pressing" (release); auto-fills title, genre, label, release date, and cover art; auto-creates or matches artist; cover art proxied server-side
 - **Date field UX** — iOS zoom fix on date inputs; clear (✕) button on release and acquired date fields in both add and edit views
 - **Delete confirmation layout** — stacked vertically so long album titles don't squish the Cancel/Delete buttons on mobile
-- **Edit/Delete button centering** — footer buttons centered rather than spread to opposite sides of the card
 - **Mobile hover fix** — hover styles on record cards scoped to `@media (hover: hover)` so touch-scroll no longer leaves cards stuck in hover state
-- **Drag handle cursor** — grab cursor scoped to the handle bar only; no longer bleeds into the title bar
 - **Landing page** — app name, tagline, sign-in CTA, privacy policy link
 - **Privacy policy** — publicly accessible at `/privacy`, linked from landing page
 - **Sort improvements** — default sort is Artist A→Z; "Default" renamed to "Date added" and moved to end of list
