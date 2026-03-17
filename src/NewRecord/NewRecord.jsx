@@ -20,6 +20,7 @@ function NewRecord(props) {
 	const [artistExistsNotice, setArtistExistsNotice] = useState('');
 	const [pendingTracks, setPendingTracks] = useState([]);
 	const [submitError, setSubmitError] = useState('');
+	const [submitting, setSubmitting] = useState(false);
 
 	useEffect(() => {
 		axios.get(requests.postArtistURL).then((res) => setArtists(res.data));
@@ -27,6 +28,7 @@ function NewRecord(props) {
 
 	const doSubmit = (inputsToSubmit) => {
 		setSubmitError('');
+		setSubmitting(true);
 		const newAlbum = {
 			...inputsToSubmit,
 			release_date: inputsToSubmit.release_date || null,
@@ -47,11 +49,18 @@ function NewRecord(props) {
 								artist_id: artistId,
 							})
 						)
-					);
+					).catch(() => {
+						history.push('/records');
+						return Promise.reject('tracks_failed');
+					});
 				}
 			})
 			.then(() => history.push('/records'))
-			.catch(() => setSubmitError('Something went wrong. Please try again.'));
+			.catch((err) => {
+				if (err === 'tracks_failed') return;
+				setSubmitting(false);
+				setSubmitError('Something went wrong. Please try again.');
+			});
 	};
 
 	const handleFormSubmit = (e) => {
@@ -348,7 +357,7 @@ function NewRecord(props) {
 						<button type='button' className='submitButton' onClick={() => history.push('/records')}>
 							Cancel
 						</button>
-						<input type='submit' className='submitButton' />
+						<input type='submit' className='submitButton' disabled={submitting} />
 					</div>
 				)}
 			</form>
