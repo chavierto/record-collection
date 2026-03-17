@@ -10,6 +10,10 @@ const requests = {
 	albumDetailURL: (id) => `/albums/${id}`,
 	songDetailURL: (id) => `/songs/${id}`,
 	artistDetailURL: (id) => `/artists/${id}`,
+	discogsSearchURL: `/discogs/search`,
+	discogsReleaseURL: (id) => `/discogs/release/${id}`,
+	discogsMasterURL: (id) => `/discogs/master/${id}`,
+	discogsImageURL: (url) => `${devUrl}/discogs/image?url=${encodeURIComponent(url)}`,
 };
 
 export default requests;

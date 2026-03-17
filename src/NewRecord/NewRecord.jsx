@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import useForm from '../CustomHooks';
 import ArtistCombobox from '../ArtistCombobox/ArtistCombobox';
+import DiscogsSearch from '../DiscogsSearch/DiscogsSearch';
 import axios from '../axios';
 import requests from '../requests';
 import './NewRecord.css';
@@ -35,6 +36,58 @@ function NewRecord(props) {
 			return;
 		}
 		handleSubmit(e);
+	};
+
+	const handleDiscogsSelect = async (release) => {
+		const rawName = release.artists?.[0]?.name || '';
+		const artistName = rawName.replace(/\s*\(\d+\)\s*$/, '').replace(/\s*\(a\)\s*$/, '').trim();
+		const matchedArtist = artists.find(
+			(a) => a.artist.toLowerCase() === artistName.toLowerCase()
+		);
+		const primaryImage = release.images?.find((i) => i.type === 'primary')?.uri
+			|| release.images?.[0]?.uri
+			|| '';
+
+		setInputs((prev) => ({
+			...prev,
+			title: release.title || prev.title,
+			genre: release.genres?.[0] || prev.genre,
+			label: release.labels?.[0]?.name || prev.label,
+			release_date: (() => {
+				const r = release.released;
+				if (!r) return release.year ? `${release.year}-01-01` : prev.release_date;
+				if (r.length === 10) return r;
+				if (r.length === 7) return `${r}-01`;
+				if (r.length === 4) return `${r}-01-01`;
+				return prev.release_date;
+			})(),
+			photo_url: primaryImage || prev.photo_url,
+			...(matchedArtist ? { artist_id: String(matchedArtist.id) } : {}),
+		}));
+
+		if (!matchedArtist && artistName) {
+			try {
+				const res = await axios.post(requests.postArtistURL, { artist: artistName });
+				const created = res.data;
+				setArtists((prev) => [...prev, created]);
+				setInputs((prev) => ({ ...prev, artist_id: String(created.id) }));
+				setArtistExistsNotice(`Artist created: ${created.artist}`);
+				setTimeout(() => setArtistExistsNotice(''), 3000);
+			} catch {
+				// Duplicate or error — find existing or fall back to manual
+				const existing = artists.find(
+					(a) => a.artist.toLowerCase() === artistName.toLowerCase()
+				);
+				if (existing) {
+					setInputs((prev) => ({ ...prev, artist_id: String(existing.id) }));
+					setArtistExistsNotice(`${existing.artist} already exists — selected.`);
+					setTimeout(() => setArtistExistsNotice(''), 3000);
+				} else {
+					setNewArtistName(artistName);
+					setShowNewArtist(true);
+				}
+			}
+		}
 	};
 
 	const handleConfirmDuplicate = () => {
@@ -76,6 +129,7 @@ function NewRecord(props) {
 		<div className='new-record-page'>
 			<h4>New Record</h4>
 			<form onSubmit={handleFormSubmit} autoComplete='off'>
+				<DiscogsSearch onSelect={handleDiscogsSelect} />
 				<div className='editInputs'>
 					<div>
 						<label>Title: </label>
@@ -104,11 +158,11 @@ function NewRecord(props) {
 							</button>
 						)}
 						{artistExistsNotice && (
-						<span style={{ fontSize: '0.85rem', color: '#555555', fontFamily: "'Oswald', sans-serif" }}>
-							{artistExistsNotice}
-						</span>
-					)}
-					{showNewArtist && (
+							<span style={{ fontSize: '0.85rem', color: '#2a7a2a', fontFamily: "'Oswald', sans-serif" }}>
+								{artistExistsNotice}
+							</span>
+						)}
+						{showNewArtist && (
 							<div className='new-artist-form'>
 								<input
 									autoFocus
@@ -168,23 +222,41 @@ function NewRecord(props) {
 					</div>
 					<div>
 						<label>Release date:</label>
-						<input
-							className='inputField'
-							type='date'
-							name='release_date'
-							id='release_date'
-							value={inputs.release_date}
-							onChange={handleInputChange}></input>
+						<div className='field-with-clear'>
+							<input
+								className='inputField'
+								type='date'
+								name='release_date'
+								id='release_date'
+								value={inputs.release_date}
+								onChange={handleInputChange}></input>
+							{inputs.release_date && (
+								<button
+									type='button'
+									className='search-clear'
+									onClick={() => setInputs((p) => ({ ...p, release_date: '' }))}
+									aria-label='Clear date'>✕</button>
+							)}
+						</div>
 					</div>
 					<div>
 						<label>Acquired date:</label>
-						<input
-							className='inputField'
-							type='date'
-							name='acquired_date'
-							id='acquired_date'
-							value={inputs.acquired_date}
-							onChange={handleInputChange}></input>
+						<div className='field-with-clear'>
+							<input
+								className='inputField'
+								type='date'
+								name='acquired_date'
+								id='acquired_date'
+								value={inputs.acquired_date}
+								onChange={handleInputChange}></input>
+							{inputs.acquired_date && (
+								<button
+									type='button'
+									className='search-clear'
+									onClick={() => setInputs((p) => ({ ...p, acquired_date: '' }))}
+									aria-label='Clear date'>✕</button>
+							)}
+						</div>
 					</div>
 					<div>
 						<label>Photo URL:</label>

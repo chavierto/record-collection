@@ -31,7 +31,7 @@ function useForm() {
 			};
 			axios
 				.post(requests.postAlbumURL, newAlbum)
-				.then(() => history.push('/'))
+				.then(() => history.push('/records'))
 				.catch(() => setError('Something went wrong. Please try again.'));
 		}
 	};
