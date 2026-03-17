@@ -1,8 +1,8 @@
-# Record Collection
+# DeepCuts
 
 ## Project Description
 
-Record Collection is a web app for cataloging and sharing your vinyl collection. Sign in with Google, search Discogs to add records in seconds, and browse your collection from any device — including your phone at the record store.
+DeepCuts is a web app for cataloging and sharing your vinyl collection. Sign in with Google, search Discogs to add records in seconds, and browse your collection from any device — including your phone at the record store.
 
 The long-term vision is a Letterboxd-style community for vinyl collectors: clean, modern, and collection-first, using Discogs as a data source rather than competing with it as a marketplace.
 
@@ -21,7 +21,7 @@ Built with Django REST Framework and PostgreSQL for the backend and React for th
 cd backend
 pipenv install
 pipenv run python manage.py migrate
-pipenv run python manage.py runserver
+pipenv run python manage.py runserver 0.0.0.0:8000
 ```
 
 Requires a `.env` file in `backend/` with:
@@ -29,6 +29,8 @@ Requires a `.env` file in `backend/` with:
 SECRET_KEY=your-secret-key
 MODE=dev
 DATABASE_URL=postgresql://rc_user:records@localhost:5432/record_collection_be
+CLERK_JWKS_URL=https://your-clerk-frontend-api.clerk.accounts.dev/.well-known/jwks.json
+DISCOGS_TOKEN=your-discogs-token
 ```
 
 **Frontend:**
@@ -42,6 +44,7 @@ Requires a `.env.local` file in `frontend/` with:
 ```
 VITE_DEV_URL=http://localhost:8000
 VITE_PROD_URL=https://your-deployed-backend-url.com
+VITE_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
 ```
 
 <br>
@@ -96,44 +99,40 @@ VITE_PROD_URL=https://your-deployed-backend-url.com
 
 ## Tech Stack
 
-**Frontend:** React 18, React Router 5, Vite, Axios
+**Frontend:** React 18, React Router 5, Vite, Axios, @clerk/clerk-react
 
-**Backend:** Django, Django REST Framework, PostgreSQL
+**Backend:** Django 6, Django REST Framework, PostgreSQL, PyJWT
 
-**Auth:** Google OAuth via Clerk (planned)
+**Auth:** Google OAuth via Clerk (live)
+
+**External APIs:** Discogs (search, release, master, image proxy)
 
 <br>
 
 ## Data Model
 
 **Artist**
-- `artist` — name
+- `user_id` — Clerk user ID (scopes data per user)
+- `artist` — name (case-insensitive unique per user)
 - `photo_url` — optional
 - `notes` — optional
 
 **Album**
+- `user_id` — Clerk user ID (scopes data per user)
 - `title`
 - `artist` — foreign key to Artist (PROTECT — cannot delete artist with albums)
 - `release_date` — optional
 - `acquired_date` — optional
 - `genre` — optional
 - `label` — optional
-- `catalog_number` — optional (planned)
-- `country` — optional (planned)
-- `pressing` — original / reissue (planned)
-- `media_condition` — M / NM / VG+ / VG / G+ / G / F / P (planned)
-- `sleeve_condition` — same scale (planned)
-- `price_paid` — optional (planned)
-- `photo_url` — optional; superseded by Discogs cover art once integrated
+- `photo_url` — optional
 - `notes` — optional
-- `discogs_id` — optional (planned)
 
 **Song**
 - `title`
 - `track` — track number
 - `artist` — foreign key to Artist, SET_NULL (used for featured artists)
 - `album` — foreign key to Album
-- `song_url` — optional
 
 <br>
 
@@ -147,13 +146,12 @@ VITE_PROD_URL=https://your-deployed-backend-url.com
 | P1 | Edit and delete artists (UI) | Complete |
 | P2 | Vite + React 18 migration | Complete |
 | P2 | Mobile UX — bottom sheet modal, tap targets | Complete |
-| P2 | Google OAuth / multi-user auth (Clerk) | Not started |
+| P2 | Google OAuth / multi-user auth (Clerk) | Complete |
+| P2 | Discogs search and auto-fill | Complete |
 | P3 | Condition fields (media + sleeve) | Not started |
 | P3 | Pressing details (catalog number, country, pressing) | Not started |
 | P3 | Price paid field | Not started |
-| P3 | Artist page | Not started |
 | P3 | List view toggle | Not started |
-| P4 | Discogs search-and-import | Not started |
 | P4 | Discogs collection bulk import | Not started |
 | P5 | Public collection profiles | Not started |
 | P5 | Social layer (follows, activity feed) | Not started |
@@ -162,25 +160,19 @@ VITE_PROD_URL=https://your-deployed-backend-url.com
 
 ## Recent Improvements
 
-UX polish shipped outside the main roadmap:
+UX polish and features shipped:
 
-- **Vite + React 18 migration** — replaced Create React App with Vite; updated to React 18 `createRoot`; switched env vars to `VITE_*`; eliminated `NODE_OPTIONS` workaround
-- **Bootstrap removal** — replaced React Bootstrap modal with a custom `BottomSheet` component; removed Bootstrap CDN; reduced bundle ~22KB
-- **BottomSheet component** — slides up from the bottom on mobile, centered modal on desktop; portal-based (renders outside `.App`); body scroll lock; animated open/close
-- **Artists management hub** — full create, edit, delete at `/artists`; protected delete (can't remove artist with albums); album count shown per artist; full-width search with Escape to clear
-- **Tracklist search** — search now matches song titles in addition to album title and artist, using data already in state (no extra API calls)
-- **Escape key handling** — Escape clears the search bar; in the artist combobox it is two-stage (clears typed text first, then closes dropdown); in the record sheet it does nothing if the form is dirty, preventing accidental loss of unsaved changes including track reordering
-- **Artist exists notice** — when the inline new artist form finds a matching existing artist, it selects them and shows a brief confirmation ("X already exists — selected") rather than silently filling the field or showing an error
-
----
-
-## Design Notes
-
-**Featured artists on tracks**
-The album artist remains a single FK — the primary credited artist on the cover (e.g. "Radiohead" for a Radiohead album, even if individual tracks have guests). Individual songs already have an `artist` field in the data model for this purpose. Proposed UI: an optional `+ featured artist` link below the track title in the inline track editor, which reveals an ArtistCombobox when clicked. Keeps the form uncluttered for the common case. Featured artist displays as "ft. [name]" in the tracklist read view only when set, and only for songs where a featured artist has been added.
-
-**Photo URL field**
-Album cover art will be populated automatically via the Discogs API once integrated — the `photo_url` field on albums will be deprecated in favour of Discogs-sourced art. The field on artists remains as a manual option.
-
-**Monetisation model**
-Free tier with a paid Pro tier (stats, advanced filters, collection analytics) modelled on Letterboxd. The collector demographic skews toward obsession — power users willing to pay for deeper insight into their own data.
+- **Google OAuth via Clerk** — full multi-user auth; JWT middleware scopes all data per user; landing page with sign-in flow; protected routes; user avatar + sign-out in navbar
+- **Discogs search and auto-fill** — debounced search widget on the Add Record form; toggle between "Any edition" (master) and "Exact pressing" (release); auto-fills title, genre, label, release date, and cover art; auto-creates or matches artist; cover art proxied server-side
+- **Date field UX** — iOS zoom fix on date inputs; clear (✕) button on release and acquired date fields in both add and edit views
+- **Delete confirmation layout** — stacked vertically so long album titles don't squish the Cancel/Delete buttons on mobile
+- **Edit/Delete button centering** — footer buttons centered rather than spread to opposite sides of the card
+- **Mobile hover fix** — hover styles on record cards scoped to `@media (hover: hover)` so touch-scroll no longer leaves cards stuck in hover state
+- **Drag handle cursor** — grab cursor scoped to the handle bar only; no longer bleeds into the title bar
+- **Landing page** — app name, tagline, sign-in CTA, privacy policy link
+- **Privacy policy** — publicly accessible at `/privacy`, linked from landing page
+- **Sort improvements** — default sort is Artist A→Z; "Default" renamed to "Date added" and moved to end of list
+- **Vite + React 18 migration** — replaced Create React App with Vite; updated to React 18 `createRoot`
+- **Bootstrap removal** — replaced React Bootstrap modal with custom `BottomSheet`; reduced bundle ~22KB
+- **Artists management hub** — full CRUD at `/artists`; protected delete; album count per artist; full-width search
+- **Tracklist search** — search matches song titles in addition to album title and artist
