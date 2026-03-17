@@ -26,6 +26,7 @@ function ProtectedRoute({ children, ...rest }) {
 function AuthenticatedApp() {
 	const [data, setData] = useState([]);
 	const [loadError, setLoadError] = useState(false);
+	const hasLoadedOnce = React.useRef(false);
 	const [show, setShow] = useState(false);
 	const [currentRecord, setCurrentRecord] = useState({});
 	const [searchQuery, setSearchQuery] = useState('');
@@ -38,6 +39,7 @@ function AuthenticatedApp() {
 			const result = await axiosInstance.get(requests.postAlbumURL);
 			setData(result.data);
 			setLoadError(false);
+			hasLoadedOnce.current = true;
 		} catch {
 			setLoadError(true);
 		}
@@ -109,7 +111,7 @@ function AuthenticatedApp() {
 				<Switch>
 					<Route path='/records' exact render={() => (
 						<>
-							{loadError && (
+							{loadError && hasLoadedOnce.current && (
 								<p style={{ textAlign: 'center', padding: '2rem', color: '#b94a48', fontFamily: "'Oswald', sans-serif" }}>
 									Could not load records. Please check your connection and try again.
 								</p>
