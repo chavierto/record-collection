@@ -175,10 +175,7 @@ function NewRecord(props) {
 			<h4>New Record</h4>
 			<form onSubmit={handleFormSubmit} autoComplete='off'>
 				<DiscogsSearch onSelect={handleDiscogsSelect} />
-				{pendingTracks.length > 0 && (
-					<p className='tracklist-notice'>{pendingTracks.length} tracks ready to import</p>
-				)}
-				<div className='editInputs'>
+	<div className='editInputs'>
 					<div>
 						<label>Title: </label>
 						<input
