@@ -7,6 +7,7 @@ import NewRecord from './NewRecord/NewRecord';
 import Artists from './Artists/Artists';
 import Landing from './Landing/Landing';
 import SignInPage from './SignInPage/SignInPage';
+import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
 import SearchSort from './SearchSort/SearchSort';
 import axiosInstance from './axios';
 import requests from './requests';
@@ -28,7 +29,7 @@ function AuthenticatedApp() {
 	const [show, setShow] = useState(false);
 	const [currentRecord, setCurrentRecord] = useState({});
 	const [searchQuery, setSearchQuery] = useState('');
-	const [sortBy, setSortBy] = useState('default');
+	const [sortBy, setSortBy] = useState('artist_string');
 	const [sortAsc, setSortAsc] = useState(true);
 	const location = useLocation();
 
@@ -91,7 +92,7 @@ function AuthenticatedApp() {
 			);
 		})
 		.sort((a, b) => {
-			if (sortBy === 'default') return sortAsc ? a.id - b.id : b.id - a.id;
+			if (sortBy === 'date_added') return sortAsc ? a.id - b.id : b.id - a.id;
 			const aVal = a[sortBy] || '';
 			const bVal = b[sortBy] || '';
 			if (aVal < bVal) return sortAsc ? -1 : 1;
@@ -163,7 +164,8 @@ function AppRoutes() {
 			<Route path='/sign-in' render={() =>
 				isSignedIn ? <Redirect to='/records' /> : <SignInPage />
 			} />
-			<ProtectedRoute path='/'>
+			<Route path='/privacy' component={PrivacyPolicy} />
+		<ProtectedRoute path='/'>
 				<AuthenticatedApp />
 			</ProtectedRoute>
 		</Switch>

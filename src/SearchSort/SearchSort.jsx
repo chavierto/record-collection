@@ -3,13 +3,13 @@ import SortDropdown from './SortDropdown';
 import './SearchSort.css';
 
 const SORT_OPTIONS = [
-	{ value: 'default', label: 'Default' },
 	{ value: 'title', label: 'Title' },
 	{ value: 'artist_string', label: 'Artist' },
 	{ value: 'genre', label: 'Genre' },
 	{ value: 'label', label: 'Label' },
 	{ value: 'release_date', label: 'Date released' },
 	{ value: 'acquired_date', label: 'Date acquired' },
+	{ value: 'date_added', label: 'Date added' },
 ];
 
 function SearchSort({ searchQuery, onSearchChange, sortBy, onSortChange, sortAsc, onSortDirectionToggle }) {

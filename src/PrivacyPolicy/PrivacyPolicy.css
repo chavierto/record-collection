@@ -1,0 +1,56 @@
+.privacy-page {
+	min-height: 100vh;
+	padding: 3rem 1.5rem;
+	font-family: 'Oswald', sans-serif;
+}
+
+.privacy-content {
+	max-width: 640px;
+	margin: 0 auto;
+}
+
+.privacy-content h1 {
+	font-size: 2rem;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	margin-bottom: 0.25rem;
+}
+
+.privacy-updated {
+	font-size: 0.85rem;
+	opacity: 0.5;
+	margin-bottom: 2rem;
+}
+
+.privacy-content section {
+	margin-bottom: 2rem;
+}
+
+.privacy-content h2 {
+	font-size: 1rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #555555;
+	margin-bottom: 0.5rem;
+}
+
+.privacy-content p,
+.privacy-content li {
+	font-weight: 300;
+	line-height: 1.6;
+	color: #333333;
+	margin-bottom: 0.5rem;
+}
+
+.privacy-content ul {
+	padding-left: 1.25rem;
+}
+
+.privacy-content a {
+	color: #333333;
+}
+
+.privacy-content a:hover {
+	opacity: 0.6;
+}

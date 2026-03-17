@@ -25,10 +25,12 @@
 	opacity: 0.7;
 }
 
-.landing-btn {
+.landing-btn,
+.landing-btn:visited {
 	display: inline-block;
 	padding: 0.75rem 2rem;
-	border: 2px solid currentColor;
+	border: 2px solid #333333;
+	color: #333333;
 	font-family: 'Oswald', sans-serif;
 	font-size: 1rem;
 	font-weight: 500;
@@ -38,6 +40,22 @@
 	transition: background-color 0.15s, color 0.15s;
 }
 
-.landing-btn:hover {
-	background-color: currentColor;
+.landing-btn:hover,
+.landing-btn:visited:hover {
+	background-color: #333333;
+	color: #eeeeee;
+}
+
+.landing-privacy,
+.landing-privacy:visited {
+	font-size: 0.75rem;
+	opacity: 0.4;
+	text-decoration: none;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #333333;
+}
+
+.landing-privacy:hover {
+	opacity: 0.7;
 }
