@@ -130,7 +130,7 @@ function AuthenticatedApp() {
 							/>
 						</>
 					)} />
-					<Route path='/records/new' render={() => <NewRecord albums={data} />} />
+					<Route path='/records/new' render={() => <NewRecord albums={data} onRecordAdded={getRecords} />} />
 					<Route path='/artists' render={() => <Artists />} />
 				</Switch>
 			</main>

@@ -8,7 +8,7 @@ import requests from '../requests';
 import './NewRecord.css';
 
 function NewRecord(props) {
-	const { albums = [] } = props;
+	const { albums = [], onRecordAdded } = props;
 	const history = useHistory();
 	const { inputs, handleInputChange, setInputs, error: formError } = useForm();
 	const [artists, setArtists] = useState([]);
@@ -55,7 +55,10 @@ function NewRecord(props) {
 					});
 				}
 			})
-			.then(() => history.push('/records'))
+			.then(() => {
+				if (onRecordAdded) onRecordAdded();
+				history.push('/records');
+			})
 			.catch((err) => {
 				if (err === 'tracks_failed') return;
 				setSubmitting(false);
