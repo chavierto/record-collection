@@ -26,9 +26,14 @@ function sortSongs(songs) {
 	);
 }
 
-function formatDate(dateStr) {
+function formatDate(dateStr, precision = 'full') {
 	if (!dateStr) return null;
 	const [year, month, day] = dateStr.split('-').map(Number);
+	if (precision === 'year') return `${year}`;
+	if (precision === 'month') {
+		const monthName = new Date(year, month - 1, 1).toLocaleString('default', { month: 'long' });
+		return `${monthName} ${year}`;
+	}
 	const date = new Date(year, month - 1, day);
 	const monthName = date.toLocaleString('default', { month: 'long' });
 	const ordinals = ['th', 'st', 'nd', 'rd'];
@@ -282,7 +287,7 @@ function RecordModal(props) {
 					{currentRecord.artist_string && <p><span className='detail-label'>Artist:</span> {currentRecord.artist_string}</p>}
 					{currentRecord.genre && <p><span className='detail-label'>Genre:</span> {currentRecord.genre}</p>}
 					{currentRecord.label && <p><span className='detail-label'>Label:</span> {currentRecord.label}</p>}
-					{currentRecord.release_date && <p><span className='detail-label'>Release date:</span> {formatDate(currentRecord.release_date)}</p>}
+					{currentRecord.release_date && <p><span className='detail-label'>Release date:</span> {formatDate(currentRecord.release_date, currentRecord.date_precision)}</p>}
 					{currentRecord.acquired_date && <p><span className='detail-label'>Acquired date:</span> {formatDate(currentRecord.acquired_date)}</p>}
 					{currentRecord.notes && <p className='note'>{currentRecord.notes}</p>}
 				</div>

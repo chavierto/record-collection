@@ -91,25 +91,33 @@ function NewRecord(props) {
 		const tracks = (release.tracklist || []).filter((t) => t.title && t.type_ !== 'heading');
 		setPendingTracks(tracks);
 
+		const parsedDate = (() => {
+			const r = release.released;
+			if (!r) {
+				if (release.year) return { release_date: `${release.year}-01-01`, date_precision: 'year' };
+				return null;
+			}
+			if (r.length === 10) {
+				const [y, m, d] = r.split('-');
+				if (m === '00') return { release_date: `${y}-01-01`, date_precision: 'year' };
+				if (d === '00') return { release_date: `${y}-${m}-01`, date_precision: 'month' };
+				return { release_date: r, date_precision: 'full' };
+			}
+			if (r.length === 7) {
+				const [y, m] = r.split('-');
+				if (m === '00') return { release_date: `${y}-01-01`, date_precision: 'year' };
+				return { release_date: `${y}-${m}-01`, date_precision: 'month' };
+			}
+			if (r.length === 4) return { release_date: `${r}-01-01`, date_precision: 'year' };
+			return null;
+		})();
+
 		setInputs((prev) => ({
 			...prev,
 			title: release.title || prev.title,
 			genre: release.genres?.[0] || prev.genre,
 			label: release.labels?.[0]?.name || prev.label,
-			release_date: (() => {
-				const r = release.released;
-				if (!r) return release.year ? `${release.year}-01-01` : prev.release_date;
-				if (r.length === 10) {
-					const [y, m, d] = r.split('-');
-					return `${y}-${m === '00' ? '01' : m}-${d === '00' ? '01' : d}`;
-				}
-				if (r.length === 7) {
-					const [y, m] = r.split('-');
-					return `${y}-${m === '00' ? '01' : m}-01`;
-				}
-				if (r.length === 4) return `${r}-01-01`;
-				return prev.release_date;
-			})(),
+			...(parsedDate ? parsedDate : {}),
 			photo_url: primaryImage || prev.photo_url,
 			...(matchedArtist ? { artist_id: String(matchedArtist.id) } : {}),
 		}));

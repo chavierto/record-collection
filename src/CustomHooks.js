@@ -13,6 +13,7 @@ function useForm() {
 		genre: '',
 		label: '',
 		release_date: '',
+		date_precision: 'full',
 		acquired_date: '',
 		photo_url: '',
 		notes: '',

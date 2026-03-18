@@ -9,6 +9,7 @@ function useEditRecord(initialRecord, onSuccess) {
 		genre: initialRecord.genre || '',
 		label: initialRecord.label || '',
 		release_date: initialRecord.release_date || '',
+		date_precision: initialRecord.date_precision || 'full',
 		acquired_date: initialRecord.acquired_date || '',
 		photo_url: initialRecord.photo_url || '',
 		notes: initialRecord.notes || '',
@@ -22,6 +23,7 @@ function useEditRecord(initialRecord, onSuccess) {
 			genre: initialRecord.genre || '',
 			label: initialRecord.label || '',
 			release_date: initialRecord.release_date || '',
+			date_precision: initialRecord.date_precision || 'full',
 			acquired_date: initialRecord.acquired_date || '',
 			photo_url: initialRecord.photo_url || '',
 			notes: initialRecord.notes || '',
@@ -31,10 +33,11 @@ function useEditRecord(initialRecord, onSuccess) {
 
 	const handleInputChange = (event) => {
 		if (event.persist) event.persist();
-		setInputs((inputs) => ({
-			...inputs,
-			[event.target.id]: event.target.value,
-		}));
+		setInputs((inputs) => {
+			const updated = { ...inputs, [event.target.id]: event.target.value };
+			if (event.target.id === 'release_date') updated.date_precision = 'full';
+			return updated;
+		});
 	};
 
 	const performUpdate = () => {
