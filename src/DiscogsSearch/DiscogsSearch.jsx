@@ -105,6 +105,11 @@ function DiscogsSearch({ onSelect }) {
 			)}
 			{open && results.length > 0 && (
 				<ul className='discogs-results'>
+					{!specificPressing && (
+						<li className='discogs-hint'>
+							Don't see your exact cover? Switch to <button type='button' className='discogs-hint-link' onMouseDown={() => setSpecificPressing(true)}>Exact pressing</button>.
+						</li>
+					)}
 					{results.map((r) => (
 						<li
 							key={r.id}

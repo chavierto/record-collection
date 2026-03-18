@@ -10,6 +10,25 @@ h2 {
 	padding: 3rem 1rem;
 }
 
+.record-list-add-cta,
+.record-list-add-cta:visited {
+	display: inline-block;
+	margin-top: 1rem;
+	padding: 0.5rem 1.25rem;
+	border: 1px solid #333333;
+	color: #333333;
+	font-family: 'Oswald', sans-serif;
+	font-size: 0.9rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+.record-list-add-cta:hover {
+	background-color: #333333;
+	color: #eeeeee;
+}
+
 .record-list {
 	/* width: 75vmax; */
 	margin: 0 2rem;

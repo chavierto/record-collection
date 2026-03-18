@@ -110,3 +110,23 @@
 	font-size: 0.75rem;
 	opacity: 0.6;
 }
+
+.discogs-hint {
+	font-family: 'Oswald', sans-serif;
+	font-size: 0.75rem;
+	opacity: 0.6;
+	padding: 0.5rem 0.75rem;
+	border-bottom: 1px solid #eee;
+}
+
+.discogs-hint-link {
+	background: none;
+	border: none;
+	padding: 0;
+	font-family: inherit;
+	font-size: inherit;
+	opacity: 1;
+	cursor: pointer;
+	text-decoration: underline;
+	color: inherit;
+}

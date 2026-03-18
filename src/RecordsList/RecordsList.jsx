@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './RecordsList.css';
 import RecordCard from '../RecordCard/RecordCard';
 import RecordModal from '../RecordModal/RecordModal';
@@ -13,7 +14,7 @@ function RecordsList(props) {
 				<p className='record-list-empty'>
 					{props.isFiltered
 						? 'No records match your search.'
-						: 'No records yet. Add your first one!'}
+						: <>Your collection is empty.<br /><Link to='/records/new' className='record-list-add-cta'>+ Add your first record</Link></>}
 				</p>
 			) : (
 			<div className='record-list-grid'>
