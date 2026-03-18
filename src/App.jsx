@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { useAuth } from '@clerk/react';
 import NavBar from './NavBar/NavBar';
 import RecordsList from './RecordsList/RecordsList';
@@ -32,8 +32,6 @@ function AuthenticatedApp() {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [sortBy, setSortBy] = useState('artist_string');
 	const [sortAsc, setSortAsc] = useState(true);
-	const location = useLocation();
-
 	async function getRecords() {
 		try {
 			const result = await axiosInstance.get(requests.postAlbumURL);
@@ -47,18 +45,14 @@ function AuthenticatedApp() {
 
 	useEffect(() => {
 		getRecords();
-	}, [location]);
+	}, []);
 
 	useEffect(() => {
-		const interval = setInterval(getRecords, 30000);
 		const handleVisibilityChange = () => {
 			if (document.visibilityState === 'visible') getRecords();
 		};
 		document.addEventListener('visibilitychange', handleVisibilityChange);
-		return () => {
-			clearInterval(interval);
-			document.removeEventListener('visibilitychange', handleVisibilityChange);
-		};
+		return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
 	}, []);
 
 	const handleShow = (record) => {
