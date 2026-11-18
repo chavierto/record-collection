@@ -5,6 +5,7 @@ import './Landing.css';
 function Landing() {
 	return (
 		<div className='landing'>
+			<img src='/favicon.svg' alt='' className='landing-logo' />
 			<h1 className='landing-title'>DeepCuts</h1>
 			<p className='landing-tagline'>Your personal vinyl catalog.</p>
 			<Link to='/sign-in' className='landing-btn'>Sign in with Google</Link>

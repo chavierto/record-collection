@@ -8,6 +8,17 @@
 	justify-content: space-between;
 }
 
+.nav-brand {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.nav-logo {
+	width: 1.75rem;
+	height: 1.75rem;
+}
+
 .nav-text {
 	font-size: 1.5rem;
 	font-weight: normal;
