@@ -1,5 +1,6 @@
+// In dev, Vite proxies /api to Django on :8000 (see vite.config.mjs)
 const devUrl = import.meta.env.DEV
-	? `http://${window.location.hostname}:8000`
+	? '/api'
 	: import.meta.env.VITE_PROD_URL;
 
 const requests = {
