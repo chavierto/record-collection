@@ -10,6 +10,13 @@
 	padding: 2rem;
 }
 
+.landing-logo {
+	width: 5rem;
+	height: 5rem;
+	/* Pull the title closer than the page's default gap */
+	margin-bottom: -0.75rem;
+}
+
 .landing-title {
 	font-size: 3rem;
 	font-weight: 700;

@@ -6,7 +6,8 @@ import './NavBar.css';
 function NavBar() {
 	return (
 		<nav className='nav'>
-			<Link to='/records'>
+			<Link to='/records' className='nav-brand'>
+				<img src='/favicon.svg' alt='' className='nav-logo' />
 				<h1 className='nav-text'>DeepCuts</h1>
 			</Link>
 			<ul className='menu-list'>
