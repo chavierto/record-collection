@@ -7,7 +7,7 @@ import NewRecord from './NewRecord/NewRecord';
 import Artists from './Artists/Artists';
 import Landing from './Landing/Landing';
 import SignInPage from './SignInPage/SignInPage';
-import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
+import LegalPage from './Legal/LegalPage';
 import SearchSort from './SearchSort/SearchSort';
 import axiosInstance from './axios';
 import requests from './requests';
@@ -160,7 +160,7 @@ function AppRoutes() {
 			<Route path='/sign-in' render={() =>
 				isSignedIn ? <Redirect to='/records' /> : <SignInPage />
 			} />
-			<Route path='/privacy' component={PrivacyPolicy} />
+			<Route path='/privacy' component={LegalPage} />
 		<ProtectedRoute path='/'>
 				<AuthenticatedApp />
 			</ProtectedRoute>
